@@ -1,30 +1,28 @@
 const express = require('express')
+const {
+  createTimeOff,
+  getTimeOffs,
+  getTimeOff,
+  deleteTimeOff,
+  updateTimeOff
+} = require('../controllers/timeOffController')
 
 const router = express.Router()
 
+
 // get all times
-router.get('/', (req, res) => {
-  res.json({mssg: 'get times'})
-})
+router.get('/', getTimeOffs)
 
 // get a single time
-router.get('/:id', (req, res) => {
-  res.json({mssg: 'get a time'})
-})
+router.get('/:id', getTimeOff)
 
 // post a time
-router.post('/', (req, res) => {
-  res.json({mssg: 'POST a new time'})
-})
+router.post('/', createTimeOff)
 
 // delete a time
-router.delete('/:id', (req, res) => {
-  res.json({mssg: 'delete a time'})
-})
+router.delete('/:id', deleteTimeOff)
 
 // update a time
-router.patch('/:id', (req, res) => {
-  res.json({mssg: 'update a time'})
-})
+router.patch('/:id', updateTimeOff)
 
 module.exports = router
