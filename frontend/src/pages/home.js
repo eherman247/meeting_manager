@@ -1,9 +1,12 @@
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
+
+import { useTimeOffContext } from '../hooks/useTimeOffsContext'
 
 import TimeOffDetails from '../components/timeOffDetails'
+import TimeOffForm from '../components/timeOffForm'
 
 const Home = () => {
-  const [timeOffs, setTimeOffs] = useState(null)
+  const {timeOffs, dispatch} = useTimeOffContext()
 
   useEffect(() => {
     const fetchTimeOffs = async () => {
@@ -11,12 +14,12 @@ const Home = () => {
       const json = await response.json()
 
       if(response.ok) {
-        setTimeOffs(json)
+        dispatch({type: 'SET_TIMEOFF', payload: json})
       }
     }
 
     fetchTimeOffs()
-  }, [])
+  })
   return (
     <div className="home">
       <div className='time'>
@@ -24,6 +27,7 @@ const Home = () => {
           <TimeOffDetails key={timeOff._id} timeOff={timeOff}/>
         ))}
       </div>
+      <TimeOffForm/>
     </div>
   ) 
 }
