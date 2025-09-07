@@ -4,6 +4,7 @@ import { useTimeOffContext } from '../hooks/useTimeOffsContext'
 
 import TimeOffDetails from '../components/timeOffDetails'
 import TimeOffForm from '../components/timeOffForm'
+import MeetingTimesDetails from '../components/meetingTimesDetails'
 
 const Home = () => {
   const {timeOffs, dispatch} = useTimeOffContext()
@@ -28,6 +29,7 @@ const Home = () => {
         ))}
       </div>
       <TimeOffForm/>
+      <MeetingTimesDetails/>
     </div>
   ) 
 }
