@@ -12,6 +12,10 @@ export const timeOffReducer = (state, action) => {
       return {
         timeOffs: [action.payload, ...state.timeOffs]
       }
+    case 'DELETE_TIMEOFF':
+      return {
+        timeOffs: state.timeOffs.filter((t) => t._id !== action.payload._id)
+      }
     default:
       return state
   }
