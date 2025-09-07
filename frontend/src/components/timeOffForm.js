@@ -49,7 +49,7 @@ const TimeOffForm = () => {
       <h3>Add a new time constraint</h3>
 
       <label for="weekdays">Day of the week: </label>
-      <select name="days" id="weekdays" onChange={(e) => setDay(e.target.value)} defaultValue={""}required>
+      <select name="days" id="weekdays" onChange={(e) => setDay(e.target.value)} value={day} required>
         <option value=""></option>
         <option value="Sunday">Sunday</option>
         <option value="Monday">Monday</option>
@@ -65,7 +65,7 @@ const TimeOffForm = () => {
         type="time"
         step="60"
         onChange={(e) => setTimeStart(e.target.value)}
-        value={"00:00"}
+        value={timeStart}
         required
       />
 
@@ -74,7 +74,7 @@ const TimeOffForm = () => {
         type="time"
         step="60"
         onChange={(e) => setTimeEnd(e.target.value)}
-        value={"00:01"}
+        value={timeEnd}
         required
       />
 
