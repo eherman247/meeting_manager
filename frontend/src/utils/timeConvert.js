@@ -1,4 +1,4 @@
-const minToTime = (minutes) => {
+export const minToTime = (minutes) => {
   if(minutes >= 1440){
     return "exeeded time limit"
   }
@@ -26,4 +26,11 @@ const minToTime = (minutes) => {
   return String(hour) + ":" + mins + ampm
 }
 
-export default minToTime
+export const timeToMin = (time) => {
+  const hour = Number(time.slice(0, 2))
+  const min = Number(time.slice(3,5))
+
+  return hour * 60 + min
+}
+
+// export default minToTime

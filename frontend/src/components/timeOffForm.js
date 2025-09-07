@@ -1,19 +1,26 @@
 import { useState } from "react"
 import { useTimeOffContext } from "../hooks/useTimeOffsContext"
+import { timeToMin } from "../utils/timeConvert"
 
 
 const TimeOffForm = () => {
   const {dispatch} = useTimeOffContext()
 
   const [day, setDay] = useState('')  
-  const [timeStart, setTimeStart] = useState('')  
-  const [timeEnd, setTimeEnd] = useState('')  
+  const [timeStart, setTimeStart] = useState('00:00')  
+  const [timeEnd, setTimeEnd] = useState('00:01')  
   const [error, setError] = useState(null)  
   
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const time = {day, timeStart, timeEnd}
+    // converting time to integers for backend
+    const startMin = timeToMin(timeStart)
+    const endMin = timeToMin(timeEnd)
+
+    // data to be sent to backend
+    const time = {day:day, timeStart:startMin, timeEnd:endMin}
+    
 
     const response = await fetch('/times', {
       method: 'POST',
@@ -29,8 +36,8 @@ const TimeOffForm = () => {
     }
     if(response.ok){
       setDay('')
-      setTimeStart('')
-      setTimeEnd('')
+      setTimeStart('00:00')
+      setTimeEnd('00:01')
       setError(null)
       console.log('new time added', json)
       dispatch({type: 'CREATE_TIMEOFF', payload: json})
@@ -41,25 +48,34 @@ const TimeOffForm = () => {
     <form className="form" onSubmit={handleSubmit}>
       <h3>Add a new time constraint</h3>
 
-      <label>Day: </label>
-      <input
-        type="text"
-        onChange={(e) => setDay(e.target.value)}
-        value={day}
-      />
+      <label for="weekdays">Day of the week: </label>
+      <select name="days" id="weekdays" onChange={(e) => setDay(e.target.value)} defaultValue={""}required>
+        <option value=""></option>
+        <option value="Sunday">Sunday</option>
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+        <option value="Saturday">Saturday</option>
+      </select>
 
       <label>Start Time: </label>
       <input
-        type="number"
+        type="time"
+        step="60"
         onChange={(e) => setTimeStart(e.target.value)}
-        value={timeStart}
+        value={"00:00"}
+        required
       />
 
       <label>End Time: </label>
       <input
-        type="number"
+        type="time"
+        step="60"
         onChange={(e) => setTimeEnd(e.target.value)}
-        value={timeEnd}
+        value={"00:01"}
+        required
       />
 
       <button>Add Time</button>
