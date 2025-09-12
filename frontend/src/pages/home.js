@@ -21,6 +21,7 @@ const Home = () => {
 
     fetchTimeOffs()
   })
+
   return (
     <div className="home">
       <div className='time'>
@@ -29,7 +30,7 @@ const Home = () => {
         ))}
       </div>
       <TimeOffForm/>
-      <MeetingTimesDetails/>
+      <MeetingTimesDetails timeOffs={timeOffs}/>
     </div>
   ) 
 }
