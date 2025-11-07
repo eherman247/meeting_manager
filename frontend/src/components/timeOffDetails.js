@@ -17,7 +17,6 @@ const TimeOffDetails = ({timeOff}) => {
 
   return (
     <div className="time-details">
-      <h3>{timeOff.day}</h3>
       <p>{minToTime(timeOff.timeStart)} - {minToTime(timeOff.timeEnd)}</p>
       <button onClick={handleClick}>delete</button>
     </div>
