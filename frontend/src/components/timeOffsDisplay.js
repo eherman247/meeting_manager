@@ -28,46 +28,46 @@ const TimeOffsDisplay = () => {
 
   return (
     <div className="time-offs-display">
-      <h2>Availability</h2>
+      <h2 className="text-center">Availability</h2>
       <div className="time-offs-by-day">
         <div className="time-off-day">
-          <h3>Sunday</h3>
+          <h3 className="time-off-day-head">Sunday</h3>
           {sunTimeOffs && sunTimeOffs.map((timeOff) => (
             <TimeOffDetails key={timeOff._id} timeOff={timeOff}/>
           ))}
         </div>
         <div className="time-off-day">
-          <h3>Monday</h3>
+          <h3 className="time-off-day-head">Monday</h3>
           {monTimeOffs && monTimeOffs.map((timeOff) => (
             <TimeOffDetails key={timeOff._id} timeOff={timeOff}/>
           ))}
         </div>
         <div className="time-off-day">
-          <h3>Tuesday</h3>
+          <h3 className="time-off-day-head">Tuesday</h3>
           {tueTimeOffs && tueTimeOffs.map((timeOff) => (
             <TimeOffDetails key={timeOff._id} timeOff={timeOff}/>
           ))}
         </div>
         <div className="time-off-day">
-          <h3>Wednesday</h3>
+          <h3 className="time-off-day-head">Wednesday</h3>
           {wedTimeOffs && wedTimeOffs.map((timeOff) => (
             <TimeOffDetails key={timeOff._id} timeOff={timeOff}/>
           ))}
         </div>
         <div className="time-off-day">
-          <h3>Thursday</h3>
+          <h3 className="time-off-day-head">Thursday</h3>
           {thuTimeOffs && thuTimeOffs.map((timeOff) => (
             <TimeOffDetails key={timeOff._id} timeOff={timeOff}/>
           ))}
         </div>
         <div className="time-off-day">
-          <h3>Friday</h3>
+          <h3 className="time-off-day-head">Friday</h3>
           {friTimeOffs && friTimeOffs.map((timeOff) => (
             <TimeOffDetails key={timeOff._id} timeOff={timeOff}/>
           ))}
         </div>
         <div className="time-off-day">
-          <h3>Saturday</h3>
+          <h3 className="time-off-day-head">Saturday</h3>
           {satTimeOffs && satTimeOffs.map((timeOff) => (
             <TimeOffDetails key={timeOff._id} timeOff={timeOff}/>
           ))}
