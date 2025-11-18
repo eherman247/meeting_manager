@@ -6,6 +6,7 @@ import { timeToMin } from "../utils/timeConvert"
 const TimeOffForm = () => {
   const {dispatch} = useTimeOffContext()
 
+  const [name, setName] = useState('')  
   const [day, setDay] = useState('')  
   const [timeStart, setTimeStart] = useState('00:00')  
   const [timeEnd, setTimeEnd] = useState('00:01')  
@@ -19,8 +20,7 @@ const TimeOffForm = () => {
     const endMin = timeToMin(timeEnd)
 
     // data to be sent to backend
-    const time = {day:day, timeStart:startMin, timeEnd:endMin}
-    
+    const time = {name:name, day:day, timeStart:startMin, timeEnd:endMin}   
 
     const response = await fetch('/times', {
       method: 'POST',
@@ -30,11 +30,12 @@ const TimeOffForm = () => {
       }
     })
     const json = await response.json()
-
+    
     if(!response.ok) {
       setError(json.error)
     }
     if(response.ok){
+      setName('')
       setDay('')
       setTimeStart('00:00')
       setTimeEnd('00:01')
@@ -47,6 +48,14 @@ const TimeOffForm = () => {
   return (
     <form className="form" onSubmit={handleSubmit}>
       <h3>Add a new time constraint</h3>
+
+      <label>Name: </label>
+      <input
+        type="text"
+        onChange={(e) => setName(e.target.value)}
+        value={name}
+        required
+      />
 
       <label for="weekdays">Day of the week: </label>
       <select name="days" id="weekdays" onChange={(e) => setDay(e.target.value)} value={day} required>

@@ -27,11 +27,11 @@ const getTimeOff = async (req, res) => {
 
 // create a new time
 const createTimeOff = async (req, res) => {
-  const {day, timeStart, timeEnd} = req.body
+  const {name, day, timeStart, timeEnd} = req.body
 
 
   try {
-    const timeOff = await TimeOff.create({day, timeStart, timeEnd})
+    const timeOff = await TimeOff.create({name, day, timeStart, timeEnd})
     res.status(200).json(timeOff)
   }
   catch(error) {
