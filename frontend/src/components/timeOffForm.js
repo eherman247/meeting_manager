@@ -40,7 +40,6 @@ const TimeOffForm = () => {
       setTimeStart('00:00')
       setTimeEnd('00:01')
       setError(null)
-      console.log('new time added', json)
       dispatch({type: 'CREATE_TIMEOFF', payload: json})
     }
   }

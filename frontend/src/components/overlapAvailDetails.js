@@ -15,7 +15,8 @@ const OverlapAvailDetails = () => {
     }
 
     fetchTimeOffs()
-  })
+    console.log("test overlap")
+  }, [dispatch])
 
   // const sunTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Sunday") : []
   // const monTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Monday") : []
