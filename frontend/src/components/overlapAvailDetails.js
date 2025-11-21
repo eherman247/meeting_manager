@@ -1,5 +1,7 @@
 import { useTimeOffContext } from "../hooks/useTimeOffsContext"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
+import { overlapTimes } from "../utils/overlapTimes"
+import { consolidateArrayTimes } from "../utils/consolidateArrayTimes"
 
 const OverlapAvailDetails = () => {
   const {timeOffs, dispatch} = useTimeOffContext()
@@ -15,19 +17,34 @@ const OverlapAvailDetails = () => {
     }
 
     fetchTimeOffs()
-    console.log("test overlap")
   }, [dispatch])
 
-  // const sunTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Sunday") : []
-  // const monTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Monday") : []
-  // const tueTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Tuesday") : []
-  // const wedTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Wednesday") : []
-  // const thuTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Thursday") : []
-  // const friTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Friday") : []
-  // const satTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Saturday") : []
+  const uniqueNames = useMemo(() => {
+    return [...new Set(timeOffs ? timeOffs.map((timeOff) => timeOff.name) : [])]
+  }, [timeOffs])
+  const numUniqueNames = uniqueNames.length
 
-  const names = timeOffs ? timeOffs.map((timeOff) => timeOff.name) : []
-  const uniqueNames = [...new Set(names)]
+  const overlaps = overlapTimes(timeOffs)
+
+  console.log('overlaps array', overlaps)
+
+  function getAllIndexesWithReduce(arr, val) {
+  return arr.reduce((acc, element, index) => {
+    if (element === val) {
+      acc.push(index);
+    }
+    return acc;
+  }, []);
+  }
+
+  const foundIndexes = getAllIndexesWithReduce(overlaps, numUniqueNames)
+
+  const consolidated = consolidateArrayTimes(foundIndexes)
+
+  console.log('Indexes', foundIndexes)
+  console.log('number of unique names', numUniqueNames)
+  console.log('total overlaps')
+  console.log('consolidated overlaps', consolidated)
   // console.log('unique names', uniqueNames)
 
   return (
