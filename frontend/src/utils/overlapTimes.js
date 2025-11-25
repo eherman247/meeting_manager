@@ -30,7 +30,7 @@ export const overlapTimes = (timeOffs) => {
         default:
           multiplier = 0
       }
-      for (let j = timeOff.timeStart; j < timeOff.timeEnd; j++) {
+      for (let j = timeOff.timeStart; j <= timeOff.timeEnd; j++) {
         overlaps[j + multiplier * 1440] += 1
       }
     })
