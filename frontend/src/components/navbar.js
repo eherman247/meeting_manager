@@ -7,6 +7,12 @@ const Navbar = () => {
         <Link to='/'>
           <h1>Meeting Manager</h1>
         </Link>
+        <nav>
+          <Link to='/login'>Login</Link>
+          <Link to='/createAccount'>Create Account</Link>
+          <Link to='/sessionsOverview'>Sessions Overview</Link>
+          <Link to='/timeSession'>Time Session</Link>
+        </nav>
       </div>
     </header>
   )
