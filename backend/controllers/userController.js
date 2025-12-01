@@ -8,16 +8,14 @@ const createToken = (_id) => {
 
 // get a single user
 const loginUser = async (req, res) => {
-  res.json({mssg: 'Login user'})
-  // const {id} = req.params
-  // if(!mongoose.Types.ObjectId.isValid(id)){
-  //   return res.status(404).json({error: 'No such user'})
-  // }
-  // const user = await User.findById(id)
-  // if(!user){
-  //   return res.status(404).json({error: 'No such user'})
-  // }
-  // res.status(200).json(user)
+  const {email, password} = req.body
+  try {
+    const user = await User.login(email, password)
+    const token = createToken(user._id)
+    res.status(200).json({email, token})
+  } catch (error) {
+    res.status(400).json({error: error.message})
+  }
 }
 
 // create a new user
