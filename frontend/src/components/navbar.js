@@ -1,6 +1,14 @@
 import {Link} from 'react-router-dom'
+import { useLogout } from '../hooks/useLogout'
 
 const Navbar = () => {
+
+  const { logout } = useLogout();
+
+  const handleClick = () => {
+    logout();
+  }
+
   return (
     <header>
       <div className="nav">
@@ -8,10 +16,15 @@ const Navbar = () => {
           <h1>Meeting Manager</h1>
         </Link>
         <nav>
-          <Link to='/login'>Login</Link>
-          <Link to='/createAccount'>Create Account</Link>
-          <Link to='/sessionsOverview'>Sessions Overview</Link>
-          <Link to='/timeSession'>Time Session</Link>
+          <div>
+            <button onClick={handleClick}>Logout</button>
+          </div>
+          <div>
+            <Link to='/login'>Login</Link>
+            <Link to='/createAccount'>Create Account</Link>
+            <Link to='/sessionsOverview'>Sessions Overview</Link>
+            <Link to='/timeSession'>Time Session</Link>
+          </div>
         </nav>
       </div>
     </header>
