@@ -1,12 +1,22 @@
 import {minToTime} from "../utils/timeConvert"
 import { useTimeOffContext } from "../hooks/useTimeOffsContext"
+import { useAuthContext } from "../hooks/useAuthContext"
 
 const TimeOffDetails = ({timeOff}) => {
   const {dispatch} = useTimeOffContext()
+  const { user } = useAuthContext()
 
   const handleClick = async () => {
+
+    if(!user){
+      return
+    }
+
     const response = await fetch('/times/' + timeOff._id, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
     })
     const json = await response.json()
 

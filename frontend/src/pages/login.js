@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useLogin } from "../hooks/useLogin";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const { login } = useAuthContext();
+  const { login, isLoading, error: loginError } = useLogin();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,8 +33,9 @@ const Login = () => {
         value={password}
       />
       
-      <button type="submit">Login</button>
+      <button type="submit" disabled={isLoading}>Login</button>
       {error && <div className="error">{error}</div>}
+      {loginError && <div className="error">{loginError}</div>}
     </form>
   )
 }

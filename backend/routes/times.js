@@ -6,9 +6,12 @@ const {
   deleteTimeOff,
   updateTimeOff
 } = require('../controllers/timeOffController')
+const requireAuth = require('../middleware/requireAuth')
 
 const router = express.Router()
 
+// require auth for all time off routes
+router.use(requireAuth)
 
 // get all times
 router.get('/', getTimeOffs)

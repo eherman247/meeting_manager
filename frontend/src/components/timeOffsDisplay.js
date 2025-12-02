@@ -2,12 +2,20 @@ import { useTimeOffContext } from "../hooks/useTimeOffsContext"
 import { useEffect } from "react"
 import TimeOffDetails from "./timeOffDetails"
 
+import { useAuthContext } from "../hooks/useAuthContext"
+
+
 const TimeOffsDisplay = () => {
   const {timeOffs, dispatch} = useTimeOffContext()
+  const { user } = useAuthContext()
 
   useEffect(() => {
     const fetchTimeOffs = async () => {
-      const response = await fetch('/times')
+      const response = await fetch('/times', {
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      })
       const json = await response.json()
 
       if(response.ok) {
@@ -15,9 +23,11 @@ const TimeOffsDisplay = () => {
       }
     }
 
-    fetchTimeOffs()
+    if (user) {
+      fetchTimeOffs()
+    }
     console.log("test display")
-  }, [dispatch])
+  }, [dispatch, user])
 
   const sunTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Sunday") : []
   const monTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Monday") : []

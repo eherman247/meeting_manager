@@ -1,11 +1,12 @@
 import { useState } from "react"
 import { useTimeOffContext } from "../hooks/useTimeOffsContext"
 import { timeToMin } from "../utils/timeConvert"
+import { useAuthContext } from "../hooks/useAuthContext"
 
 
 const TimeOffForm = () => {
   const {dispatch} = useTimeOffContext()
-
+  const { user } = useAuthContext()
   const [name, setName] = useState('')  
   const [day, setDay] = useState('')  
   const [timeStart, setTimeStart] = useState('00:00')  
@@ -14,6 +15,11 @@ const TimeOffForm = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    if(!user) {
+      setError('You must be logged in')
+      return
+    }
 
     // converting time to integers for backend
     const startMin = timeToMin(timeStart)
@@ -26,7 +32,8 @@ const TimeOffForm = () => {
       method: 'POST',
       body: JSON.stringify(time),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
       }
     })
     const json = await response.json()
