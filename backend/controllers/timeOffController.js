@@ -3,9 +3,11 @@ const mongoose = require('mongoose')
 
 // get all times
 const getTimeOffs = async (req, res) => {
-  const timeOffs = await TimeOff.find({}).sort({day: -1})
+  const user_id = req.user._id
 
-    res.status(200).json(timeOffs)
+  const timeOffs = await TimeOff.find({user_id}).sort({day: -1})
+
+  res.status(200).json(timeOffs)
 }
 
 // gat a single time
@@ -28,10 +30,11 @@ const getTimeOff = async (req, res) => {
 // create a new time
 const createTimeOff = async (req, res) => {
   const {name, day, timeStart, timeEnd} = req.body
+  const user_id = req.user._id
 
 
   try {
-    const timeOff = await TimeOff.create({name, day, timeStart, timeEnd})
+    const timeOff = await TimeOff.create({name, day, timeStart, timeEnd, user_id})
     res.status(200).json(timeOff)
   }
   catch(error) {

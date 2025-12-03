@@ -26,7 +26,6 @@ const TimeOffsDisplay = () => {
     if (user) {
       fetchTimeOffs()
     }
-    console.log("test display")
   }, [dispatch, user])
 
   const sunTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Sunday") : []

@@ -18,6 +18,10 @@ const timeOffScheme = new Schema({
   timeEnd:{
     type: Number,
     required: true
+  },
+  user_id: {
+    type: String,
+    required: true
   }
 })
 

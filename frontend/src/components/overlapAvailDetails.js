@@ -4,12 +4,19 @@ import { overlapTimes } from "../utils/overlapTimes"
 import { consolidateArrayTimes } from "../utils/consolidateArrayTimes"
 import { minToTime } from "../utils/timeConvert"
 
+import { useAuthContext } from "../hooks/useAuthContext"
+
 const OverlapAvailDetails = () => {
   const {timeOffs, dispatch} = useTimeOffContext()
+  const { user } = useAuthContext()
 
   useEffect(() => {
     const fetchTimeOffs = async () => {
-      const response = await fetch('/times')
+      const response = await fetch('/times', {
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      })
       const json = await response.json()
 
       if(response.ok) {
@@ -17,8 +24,10 @@ const OverlapAvailDetails = () => {
       }
     }
 
-    fetchTimeOffs()
-  }, [dispatch])
+    if(user){
+      fetchTimeOffs()
+    }
+  }, [dispatch, user])
 
   const uniqueNames = useMemo(() => {
     return [...new Set(timeOffs ? timeOffs.map((timeOff) => timeOff.name) : [])]
@@ -39,7 +48,7 @@ const OverlapAvailDetails = () => {
   const foundIndexes = getAllIndexesWithReduce(overlaps, numUniqueNames)
   const consolidated = consolidateArrayTimes(foundIndexes)
   
-  const sunOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart > 0 && overlap.timeEnd < 1440 ) : []
+  const sunOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart >= 0 && overlap.timeEnd < 1440 ) : []
   const monOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart >= 1440 && overlap.timeEnd < 2880) : []
   const tueOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart >= 2880 && overlap.timeEnd < 4320) : []
   const wedOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart >= 4320 && overlap.timeEnd < 5760) : []
