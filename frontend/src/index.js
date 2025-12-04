@@ -9,9 +9,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
+      <TimeSessionContextProvider>
       <TimeOffContextProvider>
         <App />
       </TimeOffContextProvider>
+      </TimeSessionContextProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );
