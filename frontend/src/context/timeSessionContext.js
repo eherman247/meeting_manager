@@ -10,11 +10,11 @@ export const timeSessionReducer = (state, action) => {
       }
     case 'CREATE_TIMESESSION':
       return {
-        timeSessions: [action.payload, ...state.timeSessions]
+        timeSessions: [action.payload, ...(state.timeSessions || [])]
       }
     case 'DELETE_TIMESESSION':
       return {
-        timeSessions: state.timeSessions.filter((t) => t._id !== action.payload._id)
+        timeSessions: (state.timeSessions || []).filter((t) => t._id !== action.payload._id)
       }
     default:
       return state
@@ -25,6 +25,7 @@ export const TimeSessionContextProvider = ({children}) => {
   const [state, dispatch] = useReducer(timeSessionReducer, {
     timeSessions: null
   })
+  
   return (
     <TimeSessionContext.Provider value={{...state, dispatch}}>
       {children}

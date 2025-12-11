@@ -10,11 +10,11 @@ export const timeOffReducer = (state, action) => {
       }
     case 'CREATE_TIMEOFF':
       return {
-        timeOffs: [action.payload, ...state.timeOffs]
+        timeOffs: [action.payload, ...(state.timeOffs || [])]
       }
     case 'DELETE_TIMEOFF':
       return {
-        timeOffs: state.timeOffs.filter((t) => t._id !== action.payload._id)
+        timeOffs: (state.timeOffs || []).filter((t) => t._id !== action.payload._id)
       }
     default:
       return state

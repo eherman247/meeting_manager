@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Schema = mongoose.Schema
 
 const timeSessionSchema = new Schema({
@@ -7,17 +6,15 @@ const timeSessionSchema = new Schema({
     type: String,
     required: true
   },
-  sessionCode: {
-    type: Number,
-    required: true,
-    unique: true
+  password: {
+    type: String,
+    required: false
   },
-  ownerId: {
+  user_id: {
     type: String,
     required: true
-  }
+  },
 })
 
-timeSessionSchema.plugin(AutoIncrement, {inc_field: 'sessionCode'});
 
 module.exports = mongoose.model('TimeSession', timeSessionSchema)

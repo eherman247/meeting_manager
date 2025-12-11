@@ -5,6 +5,7 @@ import Home from './pages/main';
 import Login from './pages/login';
 import CreateAccount from './pages/createAccount';
 import SessionsOverview from './pages/sessionsOverview';
+import TimeSessionCreation from './pages/timeSessionCreation';
 import TimeSession from './pages/timeSession';
 
 
@@ -44,6 +45,11 @@ function App() {
               element={user ? <SessionsOverview/> : <Navigate to="/login" />}
               >
               
+            </Route>
+            <Route
+              path="/timeSessionCreation"
+              element={user ? <TimeSessionCreation/> : <Navigate to="/login" />}
+              >
             </Route>
             <Route
               path="/timeSession"

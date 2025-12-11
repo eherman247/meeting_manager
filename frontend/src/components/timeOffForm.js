@@ -26,7 +26,9 @@ const TimeOffForm = () => {
     const endMin = timeToMin(timeEnd)
 
     // data to be sent to backend
-    const time = {name:name, day:day, timeStart:startMin, timeEnd:endMin}   
+    const time = {name:name, day:day, timeStart:startMin, timeEnd:endMin}  
+    console.log('Submitting time off:', time)
+    console.log('User', user) 
 
     const response = await fetch('/times', {
       method: 'POST',

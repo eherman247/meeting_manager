@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { TimeOffContextProvider } from './context/timeOffContext';
+import { TimeSessionContextProvider } from './context/timeSessionContext';
 import { AuthContextProvider } from './context/authContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
