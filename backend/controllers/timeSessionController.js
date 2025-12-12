@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 
 // get all time sessions
 const getTimeSessions = async (req, res) => {
-  const timeSessions =  await TimeSession.find({}).sort({_id: -1})
+  const user_id = req.user._id;
+  const timeSessions =  await TimeSession.find({user_id}).sort({_id: -1})
   res.status(200).json(timeSessions)
 }
 

@@ -50,6 +50,8 @@ export const TimeSessionForm = () => {
       setTitle('');
       setPassword(null);
       dispatch({ type: 'CREATE_TIMESESSION', payload: json });
+
+      localStorage.setItem('currentTimeSession', JSON.stringify(json));
       
       console.log('Time session created successfully:', json);
     } catch (err) {
