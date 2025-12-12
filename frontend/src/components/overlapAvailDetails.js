@@ -6,9 +6,11 @@ import { minToTime } from "../utils/timeConvert"
 
 import { useAuthContext } from "../hooks/useAuthContext"
 
-const OverlapAvailDetails = () => {
+const OverlapAvailDetails = ({filter}) => {
   const {timeOffs, dispatch} = useTimeOffContext()
   const { user } = useAuthContext()
+
+  console.log("filters", filter)
 
   useEffect(() => {
     const fetchTimeOffs = async () => {
@@ -54,13 +56,29 @@ const OverlapAvailDetails = () => {
   const foundIndexes = getAllIndexesWithReduce(overlaps, numUniqueNames)
   const consolidated = consolidateArrayTimes(foundIndexes)
   
+  // apply filters
+
   const sunOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart >= 0 && overlap.timeEnd < 1440 ) : []
+  const filteredSunOverlaps = sunOverlaps.filter((overlap) => overlap.timeEnd - overlap.timeStart >= filter.timeFilter)
+  filteredSunOverlaps.sort((a, b) => a.timeStart - b.timeStart);
   const monOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart >= 1440 && overlap.timeEnd < 2880) : []
+  const monFilteredOverlaps = monOverlaps.filter((overlap) => overlap.timeEnd - overlap.timeStart >= filter.timeFilter)
+  monFilteredOverlaps.sort((a, b) => a.timeStart - b.timeStart);
   const tueOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart >= 2880 && overlap.timeEnd < 4320) : []
+  const tueFilteredOverlaps = tueOverlaps.filter((overlap) => overlap.timeEnd - overlap.timeStart >= filter.timeFilter)
+  tueFilteredOverlaps.sort((a, b) => a.timeStart - b.timeStart);
   const wedOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart >= 4320 && overlap.timeEnd < 5760) : []
+  const wedFilteredOverlaps = wedOverlaps.filter((overlap) => overlap.timeEnd - overlap.timeStart >= filter.timeFilter)
+  wedFilteredOverlaps.sort((a, b) => a.timeStart - b.timeStart);
   const thuOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart >= 5760 && overlap.timeEnd < 7200) : []
+  const thuFilteredOverlaps = thuOverlaps.filter((overlap) => overlap.timeEnd - overlap.timeStart >= filter.timeFilter)
+  thuFilteredOverlaps.sort((a, b) => a.timeStart - b.timeStart);
   const friOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart >= 7200 && overlap.timeEnd < 8640) : []
+  const friFilteredOverlaps = friOverlaps.filter((overlap) => overlap.timeEnd - overlap.timeStart >= filter.timeFilter)
+  friFilteredOverlaps.sort((a, b) => a.timeStart - b.timeStart);
   const satOverlaps = consolidated ? consolidated.filter((overlap) => overlap.timeStart >= 8640 && overlap.timeEnd < 10080) : []
+  const satFilteredOverlaps = satOverlaps.filter((overlap) => overlap.timeEnd - overlap.timeStart >= filter.timeFilter)
+  satFilteredOverlaps.sort((a, b) => a.timeStart - b.timeStart);
 
   return (
     <div className="overlap-avail-details">
@@ -68,7 +86,7 @@ const OverlapAvailDetails = () => {
       <div className="time-offs-by-day">
         <div className="time-off-day">
           <h3 className="time-off-day-head">Sunday</h3>
-          {sunOverlaps && sunOverlaps.map((overlap) => (
+          {filteredSunOverlaps && filteredSunOverlaps.map((overlap) => (
             <div className="time-off-details" key={overlap.timeStart * 1}>
               <p>{minToTime(overlap.timeStart)} - {minToTime(overlap.timeEnd)}</p>
             </div>
@@ -76,7 +94,7 @@ const OverlapAvailDetails = () => {
         </div>
         <div className="time-off-day">
           <h3 className="time-off-day-head">Monday</h3>
-          {monOverlaps && monOverlaps.map((overlap) => (
+          {monFilteredOverlaps && monFilteredOverlaps.map((overlap) => (
             <div className="time-off-details" key={overlap.timeStart * 2}>
               <p>{minToTime(overlap.timeStart % 1440)} - {minToTime(overlap.timeEnd % 1440)}</p>
             </div>
@@ -84,7 +102,7 @@ const OverlapAvailDetails = () => {
         </div>
         <div className="time-off-day">
           <h3 className="time-off-day-head">Tuesday</h3>
-          {tueOverlaps && tueOverlaps.map((overlap) => (
+          {tueFilteredOverlaps && tueFilteredOverlaps.map((overlap) => (
             <div className="time-off-details" key={overlap.timeStart * 3}>
               <p>{minToTime(overlap.timeStart % 1440)} - {minToTime(overlap.timeEnd % 1440)}</p>
             </div>
@@ -92,7 +110,7 @@ const OverlapAvailDetails = () => {
         </div>
         <div className="time-off-day">
           <h3 className="time-off-day-head">Wednesday</h3>
-          {wedOverlaps && wedOverlaps.map((overlap) => (
+          {wedFilteredOverlaps && wedFilteredOverlaps.map((overlap) => (
             <div className="time-off-details" key={overlap.timeStart * 4}>
               <p>{minToTime(overlap.timeStart % 1440)} - {minToTime(overlap.timeEnd % 1440)}</p>
             </div>
@@ -100,7 +118,7 @@ const OverlapAvailDetails = () => {
         </div>
         <div className="time-off-day">
           <h3 className="time-off-day-head">Thursday</h3>
-          {thuOverlaps && thuOverlaps.map((overlap) => (
+          {thuFilteredOverlaps && thuFilteredOverlaps.map((overlap) => (
             <div className="time-off-details" key={overlap.timeStart * 5}>
               <p>{minToTime(overlap.timeStart % 1440)} - {minToTime(overlap.timeEnd % 1440)}</p>
             </div>
@@ -108,7 +126,7 @@ const OverlapAvailDetails = () => {
         </div>
         <div className="time-off-day">
           <h3 className="time-off-day-head">Friday</h3>
-          {friOverlaps && friOverlaps.map((overlap) => (
+          {friFilteredOverlaps && friFilteredOverlaps.map((overlap) => (
             <div className="time-off-details" key={overlap.timeStart * 6}>
               <p>{minToTime(overlap.timeStart % 1440)} - {minToTime(overlap.timeEnd % 1440)}</p>
             </div>
@@ -116,7 +134,7 @@ const OverlapAvailDetails = () => {
         </div>
         <div className="time-off-day">
           <h3 className="time-off-day-head">Saturday</h3>
-          {satOverlaps && satOverlaps.map((overlap) => (
+          {satFilteredOverlaps && satFilteredOverlaps.map((overlap) => (
             <div className="time-off-details" key={overlap.timeStart * 7}>
               <p>{minToTime(overlap.timeStart % 1440)} - {minToTime(overlap.timeEnd % 1440)}</p>
             </div>
