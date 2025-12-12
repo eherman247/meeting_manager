@@ -3,9 +3,13 @@ const mongoose = require('mongoose')
 
 // get all times
 const getTimeOffs = async (req, res) => {
-  const user_id = req.user._id
+  const { timeSession_id } = req.query
 
-  const timeOffs = await TimeOff.find({user_id}).sort({day: -1})
+  if (!timeSession_id) {
+    return res.status(400).json({error: 'timeSession_id is required'})
+  }
+
+  const timeOffs = await TimeOff.find({timeSession_id}).sort({day: -1})
 
   res.status(200).json(timeOffs)
 }

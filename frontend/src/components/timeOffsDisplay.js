@@ -11,7 +11,14 @@ const TimeOffsDisplay = () => {
 
   useEffect(() => {
     const fetchTimeOffs = async () => {
-      const response = await fetch('/times', {
+      const currentTimeSession = JSON.parse(localStorage.getItem('currentTimeSession'))
+      if (!currentTimeSession) {
+        // No active session, perhaps dispatch an empty array or handle error
+        dispatch({type: 'SET_TIMEOFF', payload: []})
+        return
+      }
+
+      const response = await fetch(`/times?timeSession_id=${currentTimeSession._id}`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }

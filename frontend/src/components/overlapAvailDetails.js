@@ -12,7 +12,13 @@ const OverlapAvailDetails = () => {
 
   useEffect(() => {
     const fetchTimeOffs = async () => {
-      const response = await fetch('/times', {
+      const currentTimeSession = JSON.parse(localStorage.getItem('currentTimeSession'))
+      if (!currentTimeSession) {
+        dispatch({type: 'SET_TIMEOFF', payload: []})
+        return
+      }
+
+      const response = await fetch(`/times?timeSession_id=${currentTimeSession._id}`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }

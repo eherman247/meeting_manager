@@ -33,6 +33,7 @@ const Navbar = () => {
             <Link to='/sessionsOverview'>Sessions Overview</Link>
             <Link to='/timeSessionCreation'>Create Time Session</Link>
             <Link to='/timeSession'>Time Session</Link>
+            <Link to='/joinSession'>Join Session</Link>
           </div>
         </nav>
       </div>

@@ -7,6 +7,7 @@ import CreateAccount from './pages/createAccount';
 import SessionsOverview from './pages/sessionsOverview';
 import TimeSessionCreation from './pages/timeSessionCreation';
 import TimeSession from './pages/timeSession';
+import JoinSession from './pages/joinSession';
 
 
 import Navbar from './components/navbar';
@@ -56,6 +57,11 @@ function App() {
               element={user ? <TimeSession/> : <Navigate to="/login" />}
               >
               
+            </Route>
+            <Route
+              path="/joinSession"
+              element={user ? <JoinSession/> : <Navigate to="/login" />}
+              >
             </Route>
           </Routes>
         </div>

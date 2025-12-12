@@ -33,6 +33,7 @@ const SessionsOverview = () => {
       {timeSessions && timeSessions.map(session => (
         <div key={session._id}>
           <h2>{session.title}</h2>
+          <h3>ID: {session._id}</h3>
           <p>Created: {new Date(session.createdAt).toLocaleDateString()}</p>
         </div>
       ))}

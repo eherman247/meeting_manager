@@ -10,8 +10,7 @@ const requireAuth = require('../middleware/requireAuth')
 
 const router = express.Router()
 
-// require auth for all time off routes
-router.use(requireAuth)
+
 
 // get all times
 router.get('/', getTimeOffs)
@@ -20,12 +19,12 @@ router.get('/', getTimeOffs)
 router.get('/:id', getTimeOff)
 
 // post a time
-router.post('/', createTimeOff)
+router.post('/', requireAuth, createTimeOff)
 
 // delete a time
-router.delete('/:id', deleteTimeOff)
+router.delete('/:id', requireAuth, deleteTimeOff)
 
 // update a time
-router.patch('/:id', updateTimeOff)
+router.patch('/:id', requireAuth, updateTimeOff)
 
 module.exports = router

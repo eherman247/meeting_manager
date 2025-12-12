@@ -9,9 +9,6 @@ const requireAuth = require('../middleware/requireAuth')
 
 const router = express.Router()
 
-// require auth for all time session routes
-router.use(requireAuth)
-
 // get all times
 router.get('/', getTimeSessions)
 
@@ -19,9 +16,9 @@ router.get('/', getTimeSessions)
 router.get('/:id', getTimeSession)
 
 // post a time
-router.post('/', createTimeSession)
+router.post('/', requireAuth, createTimeSession)
 
 // delete a time
-router.delete('/:id', deleteTimeSession)
+router.delete('/:id', requireAuth, deleteTimeSession)
 
 module.exports = router
