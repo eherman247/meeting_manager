@@ -21,12 +21,18 @@ const TimeOffForm = () => {
       return
     }
 
+    const currentTimeSession = JSON.parse(localStorage.getItem('currentTimeSession'))
+    if (!currentTimeSession) {
+      setError('No active time session. Please create or join a time session first.')
+      return
+    }
+
     // converting time to integers for backend
     const startMin = timeToMin(timeStart)
     const endMin = timeToMin(timeEnd)
 
     // data to be sent to backend
-    const time = {name:name, day:day, timeStart:startMin, timeEnd:endMin}  
+    const time = {name:name, day:day, timeStart:startMin, timeEnd:endMin, timeSession_id: currentTimeSession._id}  
     console.log('Submitting time off:', time)
     console.log('User', user) 
 

@@ -22,6 +22,10 @@ const timeOffScheme = new Schema({
   user_id: {
     type: String,
     required: true
+  },
+  timeSession_id: {
+    type: String,
+    required: true
   }
 })
 

@@ -29,18 +29,17 @@ const getTimeOff = async (req, res) => {
 
 // create a new time
 const createTimeOff = async (req, res) => {
-  const {name, day, timeStart, timeEnd} = req.body
+  const {name, day, timeStart, timeEnd, timeSession_id} = req.body
   const user_id = req.user._id
 
 
   try {
-    const timeOff = await TimeOff.create({name, day, timeStart, timeEnd, user_id})
+    const timeOff = await TimeOff.create({name, day, timeStart, timeEnd, user_id, timeSession_id})
     res.status(200).json(timeOff)
   }
   catch(error) {
     res.status(400).json({error: error.message})
   }
-  res.json({mssg: 'POST a new time'})
 }
 
 // delete a time
