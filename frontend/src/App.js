@@ -54,13 +54,13 @@ function App() {
             </Route>
             <Route
               path="/timeSession"
-              element={user ? <TimeSession/> : <Navigate to="/login" />}
+              element={<TimeSession/>}
               >
               
             </Route>
             <Route
               path="/joinSession"
-              element={user ? <JoinSession/> : <Navigate to="/login" />}
+              element={<JoinSession/>}
               >
             </Route>
           </Routes>

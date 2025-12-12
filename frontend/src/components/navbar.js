@@ -29,9 +29,13 @@ const Navbar = () => {
             <Link to='/createAccount'>Create Account</Link>
           </div>
           )}
+          {user && (
           <div>
             <Link to='/sessionsOverview'>Sessions Overview</Link>
             <Link to='/timeSessionCreation'>Create Time Session</Link>
+          </div>
+          )}
+          <div>
             <Link to='/timeSession'>Time Session</Link>
             <Link to='/joinSession'>Join Session</Link>
           </div>

@@ -34,7 +34,7 @@ const getTimeOff = async (req, res) => {
 // create a new time
 const createTimeOff = async (req, res) => {
   const {name, day, timeStart, timeEnd, timeSession_id} = req.body
-  const user_id = req.user._id
+  const user_id = req.user ? req.user.id : null
 
 
   try {

@@ -6,7 +6,6 @@ const {
   deleteTimeOff,
   updateTimeOff
 } = require('../controllers/timeOffController')
-const requireAuth = require('../middleware/requireAuth')
 
 const router = express.Router()
 
@@ -19,12 +18,12 @@ router.get('/', getTimeOffs)
 router.get('/:id', getTimeOff)
 
 // post a time
-router.post('/', requireAuth, createTimeOff)
+router.post('/', createTimeOff)
 
 // delete a time
-router.delete('/:id', requireAuth, deleteTimeOff)
+router.delete('/:id', deleteTimeOff)
 
 // update a time
-router.patch('/:id', requireAuth, updateTimeOff)
+router.patch('/:id', updateTimeOff)
 
 module.exports = router

@@ -1,12 +1,10 @@
 import { useState } from "react"
 import { useTimeOffContext } from "../hooks/useTimeOffsContext"
 import { timeToMin } from "../utils/timeConvert"
-import { useAuthContext } from "../hooks/useAuthContext"
 
 
 const TimeOffForm = () => {
   const {dispatch} = useTimeOffContext()
-  const { user } = useAuthContext()
   const [name, setName] = useState('')  
   const [day, setDay] = useState('')  
   const [timeStart, setTimeStart] = useState('00:00')  
@@ -16,10 +14,6 @@ const TimeOffForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if(!user) {
-      setError('You must be logged in')
-      return
-    }
 
     const currentTimeSession = JSON.parse(localStorage.getItem('currentTimeSession'))
     if (!currentTimeSession) {
@@ -33,15 +27,13 @@ const TimeOffForm = () => {
 
     // data to be sent to backend
     const time = {name:name, day:day, timeStart:startMin, timeEnd:endMin, timeSession_id: currentTimeSession._id}  
-    console.log('Submitting time off:', time)
-    console.log('User', user) 
+    console.log('Submitting time off:', time) 
 
     const response = await fetch('/times', {
       method: 'POST',
       body: JSON.stringify(time),
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user.token}`
+        'Content-Type': 'application/json'
       }
     })
     const json = await response.json()

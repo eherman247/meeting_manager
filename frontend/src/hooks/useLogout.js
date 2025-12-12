@@ -8,6 +8,7 @@ export const useLogout = () => {
   const logout = () => {
     // remove user from storage
     localStorage.removeItem('user')
+    localStorage.removeItem('currentTimeSession')
     // update auth context
     dispatch({ type: 'LOGOUT' })
     timeOffsDispatch({ type: 'SET_TIMEOFF', payload: null })
