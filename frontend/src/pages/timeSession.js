@@ -9,6 +9,7 @@ const TimeSession = () => {
   return (
     <div className="home">
       <h1>{localStorage.getItem('currentTimeSession') ? JSON.parse(localStorage.getItem('currentTimeSession')).title : ''}</h1>
+      <h2>Session Code: {localStorage.getItem('currentTimeSession') ? JSON.parse(localStorage.getItem('currentTimeSession'))._id : ''}</h2>
       <TimeOffsDisplay/>
       <TimeOffForm/>
       <OverlapAvailDetails/>
