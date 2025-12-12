@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom'
 
 const JoinSession = () => {
   const [sessionCode, setSessionCode] = useState('');
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +21,9 @@ const JoinSession = () => {
         throw new Error(json.error || 'Failed to join session');
       }
       localStorage.setItem('currentTimeSession', JSON.stringify(json));
+      navigate('/timeSession');
       setSessionCode('');
+      setError(null);
     } catch (err) {
       setError(err.message);
     } finally {

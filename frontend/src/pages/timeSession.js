@@ -12,6 +12,11 @@ const TimeSession = () => {
       <TimeOffsDisplay/>
       <TimeOffForm/>
       <OverlapAvailDetails/>
+      <br/>
+      <button onClick={() => {
+        localStorage.removeItem('currentTimeSession')
+        window.location.reload()
+      }}>Leave Time Session</button>
     </div>
   ) 
 }

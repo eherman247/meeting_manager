@@ -1,46 +1,199 @@
+/* Variables & Global */
+:root{
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-2: #06b6d4;
+  --danger: #dc2626;
+  --radius: 10px;
+  --shadow: 0 6px 18px rgba(15,23,42,0.08);
+}
+
+*{box-sizing:border-box}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  background: linear-gradient(180deg, var(--bg), #eef4ff 60%);
+  color: #0f172a;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.45;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-.home {
-  margin: 20px;
+/* App layout */
+.App{
+  min-height: 100vh;
 }
 
-.nav {
-  margin: 10px;
+.pages{
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 16px;
 }
+
+.page, .home{
+  background: transparent;
+}
+
+/* Header / Navbar */
+header{
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-shadow: 0 1px 0 rgba(15,23,42,0.04);
+}
+
+.nav{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav h1{
+  margin: 0;
+  font-size: 20px;
+  color: var(--accent);
+}
+
+.nav nav{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.nav a{
+  color: #0f172a;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background 0.15s ease, color 0.15s ease;
+  font-weight: 500;
+}
+
+.nav a:hover{background: rgba(37,99,235,0.08); color: var(--accent)}
+
+.nav button{
+  background: var(--accent);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.nav button:hover{opacity:0.95}
+
+/* Forms */
+.form{
+  background: var(--card);
+  padding: 18px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 520px;
+  margin: 18px 0;
+}
+
+.form h3{margin-top:0}
+
+.form label{display:block; margin:10px 0 6px; color:var(--muted); font-size:14px}
+
+.form input[type="text"],
+.form input[type="time"],
+.form select{
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e6e9ef;
+}
+
+.form button{
+  margin-top: 12px;
+  background: linear-gradient(90deg,var(--accent), var(--accent-2));
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form button:hover{opacity:0.95}
+
+.error{
+  margin-top: 10px;
+  color: var(--danger);
+  background: rgba(220,38,38,0.06);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+/* Availability grid */
+.time-offs-display{
+  margin: 18px 0;
+}
+
+.time-offs-display h2{margin:0 0 12px}
 
 .time-offs-by-day{
-  border: 4px solid #000;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
 }
 
 .time-off-day{
-  border: 2px solid #000;
-  padding: 10px;
-  margin: 10px;
-  display: inline-block;
+  background: var(--card);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: var(--shadow);
 }
 
 .time-off-day-head{
-  border-bottom: 2px solid #666;
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: var(--muted);
+  border-bottom: 1px dashed #e6e9ef;
+  padding-bottom: 8px;
 }
 
 .time-off-details{
-  border: 1px solid #999;
-  margin: 5px;
-  padding: 5px;
+  background: linear-gradient(180deg, #fff, #f8fafc);
+  border-radius: 8px;
+  padding: 10px;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.text-center{
-  text-align: center;
+.time-off-details h4{margin:0}
+
+.time-off-details button{
+  background: transparent;
+  border: 1px solid #f5f5f5;
+  color: var(--danger);
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
 }
+
+.time-off-details button:hover{opacity:0.9}
+
+/* Utilities */
+.text-center{text-align:center}
+
+/* Responsive tweaks */
+@media (max-width: 640px){
+  .nav{padding: 12px}
+  .nav nav{gap:8px; flex-wrap:wrap}
+  .form{padding:14px}
+}
+
