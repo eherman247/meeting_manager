@@ -10,7 +10,7 @@ const requireAuth = require('../middleware/requireAuth')
 const router = express.Router()
 
 // get all timesessions
-router.get('/', getTimeSessions)
+router.get('/', requireAuth, getTimeSessions)
 
 // get a single timesession
 router.get('/:id', getTimeSession)
