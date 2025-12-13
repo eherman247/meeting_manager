@@ -1,38 +1,7 @@
-import { useTimeOffContext } from "../hooks/useTimeOffsContext"
-import { useEffect } from "react"
 import TimeOffDetails from "./timeOffDetails"
 
-
-
-
-const TimeOffsDisplay = () => {
-  const {timeOffs, dispatch} = useTimeOffContext()
-
-  useEffect(() => {
-    const fetchTimeOffs = async () => {
-      const currentTimeSession = JSON.parse(localStorage.getItem('currentTimeSession'))
-      if (!currentTimeSession) {
-        // No active session, perhaps dispatch an empty array or handle error
-        dispatch({type: 'SET_TIMEOFF', payload: []})
-        return
-      }
-
-      const response = await fetch(`/times?timeSession_id=${currentTimeSession._id}`, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      const json = await response.json()
-
-      if(response.ok) {
-        dispatch({type: 'SET_TIMEOFF', payload: json})
-      }
-    }
-
-    
-    fetchTimeOffs()
-
-  }, [dispatch])
+const TimeOffsDisplay = ({timeOffs}) => {
+  
 
   const sunTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Sunday") : []
   const monTimeOffs = timeOffs ? timeOffs.filter((timeOff) => timeOff.day === "Monday") : []

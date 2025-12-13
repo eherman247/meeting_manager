@@ -1,46 +1,14 @@
-import { useTimeOffContext } from "../hooks/useTimeOffsContext"
-import { useEffect, useMemo } from "react"
 import { overlapTimes } from "../utils/overlapTimes"
 import { consolidateArrayTimes } from "../utils/consolidateArrayTimes"
 import { minToTime } from "../utils/timeConvert"
 
-import { useAuthContext } from "../hooks/useAuthContext"
+const OverlapAvailDetails = ({timeOffs, filter, uniqueNames}) => {
 
-const OverlapAvailDetails = ({filter}) => {
-  const {timeOffs, dispatch} = useTimeOffContext()
-  const { user } = useAuthContext()
+  const numUniqueNames = uniqueNames.length - filter.peopleFilter.length
 
-  console.log("filters", filter)
-
-  useEffect(() => {
-    const fetchTimeOffs = async () => {
-      const currentTimeSession = JSON.parse(localStorage.getItem('currentTimeSession'))
-      if (!currentTimeSession) {
-        dispatch({type: 'SET_TIMEOFF', payload: []})
-        return
-      }
-
-      const response = await fetch(`/times?timeSession_id=${currentTimeSession._id}`, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`
-        }
-      })
-      const json = await response.json()
-
-      if(response.ok) {
-        dispatch({type: 'SET_TIMEOFF', payload: json})
-      }
-    }
-
-    if(user){
-      fetchTimeOffs()
-    }
-  }, [dispatch, user])
-
-  const uniqueNames = useMemo(() => {
-    return [...new Set(timeOffs ? timeOffs.map((timeOff) => timeOff.name) : [])]
-  }, [timeOffs])
-  const numUniqueNames = uniqueNames.length
+  for (const name of filter.peopleFilter) {
+    timeOffs = timeOffs.filter((timeOff) => timeOff.name !== name)
+  }
 
   const overlaps = overlapTimes(timeOffs)
 
