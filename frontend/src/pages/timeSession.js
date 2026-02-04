@@ -1,13 +1,16 @@
-
 import TimeOffForm from '../components/timeOffForm'
 import TimeOffsDisplay from '../components/timeOffsDisplay'
 import OverlapAvailDetails from '../components/overlapAvailDetails'
 import { useTimeOffContext } from "../hooks/useTimeOffsContext"
 import { useState, useEffect, useMemo } from 'react'
 
+import { overlapTimes } from "../utils/overlapTimes"
+
 const TimeSession = () => {
   const [peopleFilter, setPeopleFilter] = useState([])
   const [timeFilter, setTimeFilter] = useState(0)
+  const [peopleWhoMatchUser, setPeopleWhoMatchUser] = useState([])
+  const [user, setUser] = useState(null)
   
   const filter = {peopleFilter, timeFilter}
 
@@ -73,10 +76,52 @@ const TimeSession = () => {
         min="0"
       />
       <br/>
+      
       <button onClick={() => {
         setPeopleFilter([])
         setTimeFilter(0)
       }}>Clear Filters</button>
+
+      <h3>Users:</h3>
+      {uniqueNames && uniqueNames.map((person) => (
+        <span key={person}>{person}, </span>
+      ))}
+
+      <h3>Find users who match:</h3>
+      <h4>Select current user:</h4>
+      {uniqueNames && uniqueNames.map((person) => (
+        <><input key={person} type="radio" name="user" onChange={() => {
+          setUser(person)
+        }} checked={user === person}/>{person}<br/></>
+      ))}
+      <br/>
+      <button onClick={() => {
+        if (!user) return
+        const userTimeOffs = timeOffs.filter((timeOff) => timeOff.name === user)
+        setPeopleWhoMatchUser([])
+        uniqueNames.forEach((person) => {
+          if (person === user) return
+          const personTimeOffs = timeOffs.filter((timeOff) => timeOff.name === person)
+          const timeOffCompare = [...userTimeOffs, ...personTimeOffs]
+          const overlaps = overlapTimes(timeOffCompare).includes(2)
+          if (overlaps) {
+            setPeopleWhoMatchUser((prev) => {
+              if (!prev.includes(person)) {
+                return [...prev, person]
+              } else {
+                return prev
+              }
+            })
+          }
+        })
+      }}>Find Matching Users</button>
+      <h4>People who have overlapping availability with {user}:</h4>
+      {peopleWhoMatchUser.length > 0 ? peopleWhoMatchUser.map((person) => (
+        <span key={person}>{person}, </span>
+      )) : <p>No matching users found.</p>}
+      <br/><br/>
+
+
       <OverlapAvailDetails timeOffs={timeOffs} filter={filter} uniqueNames={uniqueNames}/>
       <br/>
       <button onClick={() => {

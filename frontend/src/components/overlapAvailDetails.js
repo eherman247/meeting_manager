@@ -12,6 +12,8 @@ const OverlapAvailDetails = ({timeOffs, filter, uniqueNames}) => {
 
   const overlaps = overlapTimes(timeOffs)
 
+  //console.log("overlaps in overlap avail details", overlaps)
+
   function getAllIndexesWithReduce(arr, val) {
   return arr.reduce((acc, element, index) => {
     if (element === val) {
