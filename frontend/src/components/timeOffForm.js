@@ -1,59 +1,67 @@
-import { useState } from "react"
-import { useTimeOffContext } from "../hooks/useTimeOffsContext"
-import { timeToMin } from "../utils/timeConvert"
-
+import { useState } from "react";
+import { useTimeOffContext } from "../hooks/useTimeOffsContext";
+import { timeToMin } from "../utils/timeConvert";
 
 const TimeOffForm = () => {
-  const {dispatch} = useTimeOffContext()
-  const [name, setName] = useState('')  
-  const [day, setDay] = useState('')  
-  const [timeStart, setTimeStart] = useState('00:00')  
-  const [timeEnd, setTimeEnd] = useState('00:01')  
-  const [error, setError] = useState(null)  
-  
+  const { dispatch } = useTimeOffContext();
+  const [name, setName] = useState("");
+  const [day, setDay] = useState("");
+  const [timeStart, setTimeStart] = useState("00:00");
+  const [timeEnd, setTimeEnd] = useState("00:01");
+  const [error, setError] = useState(null);
+
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-
-    const currentTimeSession = JSON.parse(localStorage.getItem('currentTimeSession'))
+    const currentTimeSession = JSON.parse(
+      localStorage.getItem("currentTimeSession"),
+    );
     if (!currentTimeSession) {
-      setError('No active time session. Please create or join a time session first.')
-      return
+      setError(
+        "No active time session. Please create or join a time session first.",
+      );
+      return;
     }
 
     // converting time to integers for backend
-    const startMin = timeToMin(timeStart)
-    const endMin = timeToMin(timeEnd)
+    const startMin = timeToMin(timeStart);
+    const endMin = timeToMin(timeEnd);
 
     // data to be sent to backend
-    const time = {name:name, day:day, timeStart:startMin, timeEnd:endMin, timeSession_id: currentTimeSession._id}  
-    console.log('Submitting time off:', time) 
+    const time = {
+      name: name,
+      day: day,
+      timeStart: startMin,
+      timeEnd: endMin,
+      timeSession_id: currentTimeSession._id,
+    };
+    console.log("Submitting time off:", time);
 
-    const response = await fetch('/times', {
-      method: 'POST',
+    const response = await fetch("/times", {
+      method: "POST",
       body: JSON.stringify(time),
       headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    const json = await response.json()
-    
-    if(!response.ok) {
-      setError(json.error)
+        "Content-Type": "application/json",
+      },
+    });
+    const json = await response.json();
+
+    if (!response.ok) {
+      setError(json.error);
     }
-    if(response.ok){
-      setName('')
-      setDay('')
-      setTimeStart('00:00')
-      setTimeEnd('00:01')
-      setError(null)
-      dispatch({type: 'CREATE_TIMEOFF', payload: json})
+    if (response.ok) {
+      setName("");
+      setDay("");
+      setTimeStart("00:00");
+      setTimeEnd("00:01");
+      setError(null);
+      dispatch({ type: "CREATE_TIMEOFF", payload: json });
     }
-  }
+  };
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <h3>Add a new time constraint</h3>
+      <h3>Add a new availability time </h3>
 
       <label>Name: </label>
       <input
@@ -64,7 +72,13 @@ const TimeOffForm = () => {
       />
 
       <label for="weekdays">Day of the week: </label>
-      <select name="days" id="weekdays" onChange={(e) => setDay(e.target.value)} value={day} required>
+      <select
+        name="days"
+        id="weekdays"
+        onChange={(e) => setDay(e.target.value)}
+        value={day}
+        required
+      >
         <option value=""></option>
         <option value="Sunday">Sunday</option>
         <option value="Monday">Monday</option>
@@ -96,8 +110,7 @@ const TimeOffForm = () => {
       <button>Add Time</button>
       {error && <div className="error">{error}</div>}
     </form>
+  );
+};
 
-  )
-}
-
-export default TimeOffForm
+export default TimeOffForm;

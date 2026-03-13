@@ -128,6 +128,14 @@ header{
 
 .form button:hover{opacity:0.95}
 
+.filter-option {
+  padding: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
 .error{
   margin-top: 10px;
   color: var(--danger);
@@ -195,5 +203,81 @@ header{
   .nav{padding: 12px}
   .nav nav{gap:8px; flex-wrap:wrap}
   .form{padding:14px}
+}
+
+/* Collapsible side panel for filters */
+.filters {
+  position: fixed;
+  top: 84px;
+  right: 0;
+  height: calc(100vh - 96px);
+  width: min(320px, 90vw);
+  padding: 18px 18px 24px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: -4px 0 18px rgba(15, 23, 42, 0.12);
+  border-left: 1px solid rgba(15, 23, 42, 0.08);
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 180ms ease-in-out;
+  z-index: 20;
+}
+
+.filters.open {
+  transform: translateX(0);
+}
+
+.filters.closed {
+  transform: translateX(100%);
+}
+
+.filters-toggle {
+  position: fixed;
+  top: 96px;
+  right: 16px;
+  z-index: 21;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.16);
+}
+
+.filters-toggle:hover {
+  opacity: 0.9;
+}
+
+.timeoffs-toggle {
+  display: inline-block;
+  margin: 16px 0 10px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(15, 23, 42, 0.14);
+}
+
+.timeoffs-toggle:hover {
+  opacity: 0.9;
+}
+
+.home.filters-open {
+  padding-right: 360px;
+}
+
+@media (max-width: 768px) {
+  .filters {
+    top: 70px;
+    height: calc(100vh - 80px);
+  }
+  .filters-toggle {
+    top: 78px;
+  }
+  .home.filters-open {
+    padding-right: 0;
+  }
 }
 
