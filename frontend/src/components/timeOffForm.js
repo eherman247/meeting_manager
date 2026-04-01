@@ -37,25 +37,63 @@ const TimeOffForm = () => {
     };
     console.log("Submitting time off:", time);
 
-    const response = await fetch("/times", {
-      method: "POST",
-      body: JSON.stringify(time),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const json = await response.json();
+    if (time.day !== "Everyday") {
+      const response = await fetch("/times", {
+        method: "POST",
+        body: JSON.stringify(time),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await response.json();
 
-    if (!response.ok) {
-      setError(json.error);
-    }
-    if (response.ok) {
-      setName("");
-      setDay("");
-      setTimeStart("00:00");
-      setTimeEnd("00:01");
-      setError(null);
-      dispatch({ type: "CREATE_TIMEOFF", payload: json });
+      if (!response.ok) {
+        setError(json.error);
+      }
+      if (response.ok) {
+        setName("");
+        setDay("");
+        setTimeStart("00:00");
+        setTimeEnd("00:01");
+        setError(null);
+        dispatch({ type: "CREATE_TIMEOFF", payload: json });
+      }
+    } else if (time.day === "Everyday") {
+      const daysOfWeek = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      for (const day of daysOfWeek) {
+        const timeForDay = {
+          ...time,
+          day: day,
+        };
+        const response = await fetch("/times", {
+          method: "POST",
+          body: JSON.stringify(timeForDay),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const json = await response.json();
+        if (!response.ok) {
+          setError(json.error);
+        }
+        if (response.ok && day === "Saturday") {
+          // only reset form and dispatch after last request
+          setName("");
+          setDay("");
+          setTimeStart("00:00");
+          setTimeEnd("00:01");
+          setError(null);
+          dispatch({ type: "CREATE_TIMEOFF", payload: json });
+        }
+      }
     }
   };
 
@@ -80,6 +118,7 @@ const TimeOffForm = () => {
         required
       >
         <option value=""></option>
+        <option value="Everyday">Everyday</option>
         <option value="Sunday">Sunday</option>
         <option value="Monday">Monday</option>
         <option value="Tuesday">Tuesday</option>
