@@ -92,6 +92,8 @@ const TimeOffForm = () => {
           setTimeEnd("00:01");
           setError(null);
           dispatch({ type: "CREATE_TIMEOFF", payload: json });
+        } else if (response.ok) {
+          dispatch({ type: "CREATE_TIMEOFF", payload: json });
         }
       }
     }

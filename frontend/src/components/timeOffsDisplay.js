@@ -25,7 +25,7 @@ const TimeOffsDisplay = ({ timeOffs }) => {
 
   return (
     <div className="time-offs-display">
-      <h2 className="text-center">Availability Times</h2>
+      <h2 className="text-center">Times where users are available</h2>
       <div className="time-offs-by-day">
         <div className="time-off-day">
           <h3 className="time-off-day-head">Sunday</h3>
