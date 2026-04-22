@@ -1,37 +1,29 @@
-import {minToTime} from "../utils/timeConvert"
-import { useTimeOffContext } from "../hooks/useTimeOffsContext"
-import { useAuthContext } from "../hooks/useAuthContext"
+import { minToTime } from "../utils/timeConvert";
+import { useTimeOffContext } from "../hooks/useTimeOffsContext";
 
-const TimeOffDetails = ({timeOff}) => {
-  const {dispatch} = useTimeOffContext()
-  const { user } = useAuthContext()
+const TimeOffDetails = ({ timeOff }) => {
+  const { dispatch } = useTimeOffContext();
 
   const handleClick = async () => {
+    const response = await fetch("/times/" + timeOff._id, {
+      method: "DELETE",
+    });
+    const json = await response.json();
 
-    if(!user){
-      return
+    if (response.ok) {
+      dispatch({ type: "DELETE_TIMEOFF", payload: json });
     }
-
-    const response = await fetch('/times/' + timeOff._id, {
-      method: 'DELETE',
-      headers: {
-          'Authorization': `Bearer ${user.token}`
-        }
-    })
-    const json = await response.json()
-
-    if(response.ok) {
-      dispatch({type: 'DELETE_TIMEOFF', payload: json})
-    }
-  }
+  };
 
   return (
     <div className="time-off-details">
       <h4>{timeOff.name}</h4>
-      <p>{minToTime(timeOff.timeStart)} - {minToTime(timeOff.timeEnd)}</p>
+      <p>
+        {minToTime(timeOff.timeStart)} - {minToTime(timeOff.timeEnd)}
+      </p>
       <button onClick={handleClick}>delete</button>
     </div>
-  )
-}
+  );
+};
 
-export default TimeOffDetails
+export default TimeOffDetails;
