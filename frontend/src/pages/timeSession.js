@@ -236,7 +236,7 @@ const TimeSession = () => {
           window.location.reload();
         }}
       >
-        Leave Time Session
+        Leave Session
       </button>
     </div>
   );
