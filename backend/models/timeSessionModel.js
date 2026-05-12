@@ -17,6 +17,13 @@ const timeSessionSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  sessionCode: {
+    type: String,
+    uppercase: true,
+    minLength: 6,
+    maxLength: 6,
+    required: true
   }
 })
 
