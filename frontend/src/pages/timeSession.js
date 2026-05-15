@@ -72,7 +72,7 @@ const TimeSession = () => {
       <h2>
         Session Code:{" "}
         {localStorage.getItem("currentTimeSession")
-          ? JSON.parse(localStorage.getItem("currentTimeSession"))._id
+          ? JSON.parse(localStorage.getItem("currentTimeSession")).sessionCode
           : ""}
       </h2>
 
