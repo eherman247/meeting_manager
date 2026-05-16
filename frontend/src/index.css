@@ -120,6 +120,8 @@ header{
 
 .form button{
   margin-top: 12px;
+  margin-right: 8px;
+  margin-left: 5px;
   background: linear-gradient(90deg,var(--accent), var(--accent-2));
   color: white;
   border: none;
@@ -129,6 +131,56 @@ header{
 }
 
 .form button:hover{opacity:0.95}
+
+.sessions-overview{
+  background: var(--card);
+  padding: 18px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 760px;
+  margin: 18px auto;
+}
+
+.sessions-overview h1{
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.time-session-item{
+  background: var(--bg);
+  border: 1px solid #e6e9ef;
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.time-session-item h2{
+  margin: 0 0 6px;
+}
+
+.time-session-item h3{
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.time-session-actions{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.page-button{
+  background: linear-gradient(90deg,var(--accent), var(--accent-2));
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.page-button:hover{opacity:0.95}
 
 .filter-option {
   padding: 12px;
@@ -273,6 +325,18 @@ header{
 /* .form-group {
   margin-bottom: 16px;
 } */
+
+.page-button{
+  margin-top: 12px;
+  margin-right: 8px;
+  margin-left: 5px;
+  background: linear-gradient(90deg,var(--accent), var(--accent-2));
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
 @media (max-width: 768px) {
   .filters {

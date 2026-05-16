@@ -93,6 +93,7 @@ export const TimeSessionForm = () => {
       setError(err.message || "An error occurred");
     } finally {
       setLoading(false);
+      window.location.href = "/timeSession";
     }
   };
 
