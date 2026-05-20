@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useTimeSessionContext } from "../hooks/useTimeSessionContext";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
 
 export const TimeSessionForm = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [password, setPassword] = useState(null);
   const [error, setError] = useState(null);
@@ -93,7 +95,7 @@ export const TimeSessionForm = () => {
       setError(err.message || "An error occurred");
     } finally {
       setLoading(false);
-      window.location.href = "/timeSession";
+      navigate("/timeSession");
     }
   };
 

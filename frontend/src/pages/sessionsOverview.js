@@ -1,8 +1,10 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTimeSessionContext } from "../hooks/useTimeSessionContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 const SessionsOverview = () => {
+  const navigate = useNavigate();
   const { timeSessions, dispatch } = useTimeSessionContext();
   const { user } = useAuthContext();
 
@@ -43,7 +45,7 @@ const SessionsOverview = () => {
                     "currentTimeSession",
                     JSON.stringify(session),
                   );
-                  window.location.href = "/timeSession";
+                  navigate("/timeSession");
                 }}
               >
                 Join Session

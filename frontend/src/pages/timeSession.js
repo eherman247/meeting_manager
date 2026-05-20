@@ -3,10 +3,12 @@ import TimeOffsDisplay from "../components/timeOffsDisplay";
 import OverlapAvailDetails from "../components/overlapAvailDetails";
 import { useTimeOffContext } from "../hooks/useTimeOffsContext";
 import { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { overlapTimes } from "../utils/overlapTimes";
 
 const TimeSession = () => {
+  const navigate = useNavigate();
   const [peopleFilter, setPeopleFilter] = useState([]);
   const [timeFilter, setTimeFilter] = useState(0);
   const [peopleWhoMatchUser, setPeopleWhoMatchUser] = useState([]);
@@ -233,7 +235,7 @@ const TimeSession = () => {
       <button
         onClick={() => {
           localStorage.removeItem("currentTimeSession");
-          window.location.reload();
+          navigate("/");
         }}
       >
         Leave Session
