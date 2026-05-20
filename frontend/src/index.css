@@ -338,6 +338,18 @@ header{
   cursor: pointer;
 }
 
+button{
+  margin-top: 12px;
+  margin-right: 8px;
+  margin-left: 5px;
+  background: linear-gradient(90deg,var(--accent), var(--accent-2));
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .filters {
     top: 70px;
