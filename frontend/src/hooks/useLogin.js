@@ -1,36 +1,35 @@
-import {useState} from "react";
-import {useAuthContext} from "../hooks/useAuthContext";
+import { useState } from "react";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 export const useLogin = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const {dispatch} = useAuthContext();
+  const { dispatch } = useAuthContext();
 
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
-    const response = await fetch('/api/auth/users/login', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email, password})
+    const response = await fetch("/api/auth/users/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     });
     const json = await response.json();
     if (!response.ok) {
       setIsLoading(false);
-      setError(json.error || json.message || 'Could not log in');
+      setError(json.error || json.message || "Could not log in");
     }
     if (response.ok) {
-      // Account created successfully
-      localStorage.setItem('user', JSON.stringify(json));
+      // Logged in successfully, save the user to local storage
+      localStorage.setItem("user", JSON.stringify(json));
 
       // update auth context
-      dispatch({type: 'LOGIN', payload: json});
+      dispatch({ type: "LOGIN", payload: json });
 
       setIsLoading(false);
     }
   };
 
-  return {login, isLoading, error};
-
-}
+  return { login, isLoading, error };
+};
 export default useLogin;

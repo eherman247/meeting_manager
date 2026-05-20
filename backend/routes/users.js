@@ -1,15 +1,20 @@
-const express = require('express')
+const express = require("express");
 const {
   createAccount,
-  loginUser
-} = require('../controllers/userController')
+  loginUser,
+  verifyUser,
+} = require("../controllers/userController");
+const requireAuth = require("../middleware/requireAuth");
 
-const router = express.Router()
+const router = express.Router();
 
 // get a single user
-router.post('/login', loginUser)
+router.post("/login", loginUser);
 
 // create an account
-router.post('/createUser', createAccount)
+router.post("/createUser", createAccount);
 
-module.exports = router
+// verify JWT and keep user logged in on page load
+router.get("/verify", requireAuth, verifyUser);
+
+module.exports = router;

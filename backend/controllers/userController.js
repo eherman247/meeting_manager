@@ -1,37 +1,43 @@
-const User = require('../models/userModel')
-const mongoose = require('mongoose')
-const jwt = require('jsonwebtoken')
+const User = require("../models/userModel");
+const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 const createToken = (_id) => {
-  return jwt.sign({_id}, process.env.SECRET, {expiresIn: '1d'})
-}
+  return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "1d" });
+};
 
 // get a single user
 const loginUser = async (req, res) => {
-  const {email, password} = req.body
+  const { email, password } = req.body;
   try {
-    const user = await User.login(email, password)
-    const token = createToken(user._id)
-    res.status(200).json({email, token})
+    const user = await User.login(email, password);
+    const token = createToken(user._id);
+    res.status(200).json({ email, token });
   } catch (error) {
-    res.status(400).json({error: error.message})
+    res.status(400).json({ error: error.message });
   }
-}
+};
 
 // create a new user
 const createAccount = async (req, res) => {
-  const {fname, lname, email, password} = req.body
+  const { fname, lname, email, password } = req.body;
   try {
-    const user = await User.signup(fname, lname, email, password)
+    const user = await User.signup(fname, lname, email, password);
 
-    const token = createToken(user._id)
-    res.status(200).json({email, token})
+    const token = createToken(user._id);
+    res.status(200).json({ email, token });
   } catch (error) {
-    res.status(400).json({error: error.message})
+    res.status(400).json({ error: error.message });
   }
-}
+};
+
+const verifyUser = async (req, res) => {
+  // requireAuth already validated the token and attached req.user
+  res.status(200).json({ valid: true });
+};
 
 module.exports = {
   createAccount,
-  loginUser
-}
+  loginUser,
+  verifyUser,
+};
