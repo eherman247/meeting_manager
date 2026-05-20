@@ -22,7 +22,7 @@ const CreateAccount = () => {
       return;
     }
     try {
-      await createAccount(firstName, lastName, email, password);
+      await createAccount(firstName, lastName, email.toLowerCase(), password);
     } catch (err) {
       setError(err.message);
     }
