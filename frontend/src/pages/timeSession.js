@@ -95,7 +95,7 @@ const TimeSession = () => {
         </div>
       )}
 
-      <TimeOffForm />
+      <TimeOffForm currentUsersNames={uniqueNames} />
 
       <button
         className="filters-toggle"

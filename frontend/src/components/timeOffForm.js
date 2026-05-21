@@ -2,13 +2,16 @@ import { useState } from "react";
 import { useTimeOffContext } from "../hooks/useTimeOffsContext";
 import { timeToMin } from "../utils/timeConvert";
 
-const TimeOffForm = () => {
+const TimeOffForm = (currentUsersNames) => {
+  const users = currentUsersNames.currentUsersNames;
   const { dispatch } = useTimeOffContext();
   const [name, setName] = useState("");
   const [day, setDay] = useState("");
   const [timeStart, setTimeStart] = useState("00:00");
   const [timeEnd, setTimeEnd] = useState("00:01");
   const [error, setError] = useState(null);
+  const [showCustomName, setShowCustomName] = useState(false);
+  const [customName, setCustomName] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,6 +55,8 @@ const TimeOffForm = () => {
       }
       if (response.ok) {
         setName("");
+        setCustomName("");
+        setShowCustomName(false);
         setDay("");
         setTimeStart("00:00");
         setTimeEnd("00:01");
@@ -87,6 +92,8 @@ const TimeOffForm = () => {
         if (response.ok && day === "Saturday") {
           // only reset form and dispatch after last request
           setName("");
+          setCustomName("");
+          setShowCustomName(false);
           setDay("");
           setTimeStart("00:00");
           setTimeEnd("00:01");
@@ -103,13 +110,43 @@ const TimeOffForm = () => {
     <form className="form" onSubmit={handleSubmit}>
       <h3>Add a new availability time </h3>
 
-      <label>Name: </label>
-      <input
-        type="text"
-        onChange={(e) => setName(e.target.value)}
-        value={name}
-        required
-      />
+      <label htmlFor="nameSelect">Name: </label>
+      <select
+        id="nameSelect"
+        onChange={(e) => {
+          if (e.target.value === "other") {
+            setShowCustomName(true);
+            setName("");
+          } else {
+            setShowCustomName(false);
+            setName(e.target.value);
+            setCustomName("");
+          }
+        }}
+        value={showCustomName ? "other" : name}
+        required={!showCustomName}
+      >
+        <option value=""></option>
+        {users &&
+          users.map((userName) => (
+            <option key={userName} value={userName}>
+              {userName}
+            </option>
+          ))}
+        <option value="other">Other</option>
+      </select>
+      {showCustomName && (
+        <input
+          type="text"
+          placeholder="Enter name"
+          onChange={(e) => {
+            setCustomName(e.target.value);
+            setName(e.target.value);
+          }}
+          value={customName}
+          required
+        />
+      )}
 
       <label for="weekdays">Day of the week: </label>
       <select
