@@ -1,65 +1,83 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
-const validator = require('validator')
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const validator = require("validator");
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 const userScheme = new Schema({
   fname: {
     type: String,
-    required: true
+    required: true,
   },
   lname: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
+  verificationToken: String,
+  verificationTokenExpires: Date,
+});
 
 // signup method to create a new user
-userScheme.statics.signup = async function(fname, lname, email, password) {
+userScheme.statics.signup = async function (fname, lname, email, password) {
   // validation
 
   if (!fname || !lname || !email || !password) {
-    throw Error('All fields must be filled')
+    throw Error("All fields must be filled");
   }
   if (!validator.isEmail(email)) {
-    throw Error('Email is not valid')
+    throw Error("Email is not valid");
   }
   if (!validator.isStrongPassword(password)) {
-    throw Error('Password is not strong enough')
+    throw Error("Password is not strong enough");
   }
-  const exists = await this.findOne({email})
+  const exists = await this.findOne({ email });
   if (exists) {
-    throw Error('Email already in use')
+    throw Error("Email already in use");
   }
-  const salt = await bcrypt.genSalt(10)
-  const hash = await bcrypt.hash(password, salt)
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
 
-  const user = await this.create({fname, lname, email, password: hash})
-  return user
-}
+  const verificationToken = await bcrypt.genSalt(20); // generate a random token for email verification
+  const verificationTokenExpires = Date.now() + 24 * 60 * 60 * 1000; // token expires in 24 hours
 
-userScheme.statics.login = async function(email, password) {
+  const user = await this.create({
+    fname,
+    lname,
+    email,
+    password: hash,
+    verificationToken: verificationToken,
+    verificationTokenExpires: verificationTokenExpires,
+  });
+  return user;
+};
+
+userScheme.statics.login = async function (email, password) {
   if (!email || !password) {
-    throw Error('All fields must be filled')
+    throw Error("All fields must be filled");
   }
-  const user = await this.findOne({email})
+  const user = await this.findOne({ email });
   if (!user) {
-    throw Error('Incorrect email')
+    throw Error("Incorrect email");
   }
-  const match = await bcrypt.compare(password, user.password)
+  const match = await bcrypt.compare(password, user.password);
   if (!match) {
-    throw Error('Incorrect password')
+    throw Error("Incorrect password");
   }
-  return user
-}
+  return user;
+};
 
-module.exports = mongoose.model('User', userScheme)
+module.exports = mongoose.model("User", userScheme);
