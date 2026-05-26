@@ -1,10 +1,10 @@
 const User = require("../models/userModel");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const sendVerificationEmail = require("../resend/email");
 
 const createToken = (res, _id) => {
   const token = jwt.sign({ _id }, process.env.SECRET, { expiresIn: "1d" });
-  res.cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
   return token;
 };
 
@@ -30,6 +30,7 @@ const createAccount = async (req, res) => {
 
     // Send verification email
     await sendVerificationEmail(email, user.verificationToken);
+
     res.status(200).json({ email, token });
   } catch (error) {
     res.status(400).json({ error: error.message });

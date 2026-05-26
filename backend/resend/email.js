@@ -1,6 +1,6 @@
-import resend from "./config.js";
+const resend = require("./config.js");
 
-export const sendVerificationEmail = async (email, token) => {
+const sendVerificationEmail = async (email, token) => {
   try {
     await resend.emails.send({
       from: "onboarding@resend.dev",
@@ -13,3 +13,5 @@ export const sendVerificationEmail = async (email, token) => {
     throw new Error("Failed to send verification email");
   }
 };
+
+module.exports = sendVerificationEmail;
