@@ -27,6 +27,9 @@ const createAccount = async (req, res) => {
     const user = await User.signup(fname, lname, email, password);
 
     const token = createToken(user._id);
+
+    // Send verification email
+    await sendVerificationEmail(email, user.verificationToken);
     res.status(200).json({ email, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
