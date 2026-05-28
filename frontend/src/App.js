@@ -1,17 +1,16 @@
-import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
-import { useAuthContext } from './hooks/useAuthContext';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAuthContext } from "./hooks/useAuthContext";
 
-import Home from './pages/main';
-import Login from './pages/login';
-import CreateAccount from './pages/createAccount';
-import SessionsOverview from './pages/sessionsOverview';
-import TimeSessionCreation from './pages/timeSessionCreation';
-import TimeSession from './pages/timeSession';
-import JoinSession from './pages/joinSession';
+import Home from "./pages/main";
+import Login from "./pages/login";
+import CreateAccount from "./pages/createAccount";
+import SessionsOverview from "./pages/sessionsOverview";
+import TimeSessionCreation from "./pages/timeSessionCreation";
+import TimeSession from "./pages/timeSession";
+import JoinSession from "./pages/joinSession";
+import EmailVerified from "./pages/emailVerified";
 
-
-import Navbar from './components/navbar';
-
+import Navbar from "./components/navbar";
 
 function App() {
   const { user } = useAuthContext();
@@ -19,50 +18,32 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar/>
-        <div className='pages'>
+        <Navbar />
+        <div className="pages">
           <Routes>
-            <Route
-              path="/"
-              element={<Home/>}
-              >
-              
-            </Route>
+            <Route path="/" element={<Home />}></Route>
             <Route
               path="/login"
-              element={!user ? <Login/> : <Navigate to="/" />}
-              >
-              
-            </Route>
+              element={!user ? <Login /> : <Navigate to="/" />}
+            ></Route>
 
             <Route
               path="/createAccount"
-              element={!user ? <CreateAccount/> : <Navigate to="/" />}
-              >
-              
-            </Route>
+              element={!user ? <CreateAccount /> : <Navigate to="/" />}
+            ></Route>
             <Route
               path="/sessionsOverview"
-              element={user ? <SessionsOverview/> : <Navigate to="/login" />}
-              >
-              
-            </Route>
+              element={user ? <SessionsOverview /> : <Navigate to="/login" />}
+            ></Route>
             <Route
               path="/timeSessionCreation"
-              element={user ? <TimeSessionCreation/> : <Navigate to="/login" />}
-              >
-            </Route>
-            <Route
-              path="/timeSession"
-              element={<TimeSession/>}
-              >
-              
-            </Route>
-            <Route
-              path="/joinSession"
-              element={<JoinSession/>}
-              >
-            </Route>
+              element={
+                user ? <TimeSessionCreation /> : <Navigate to="/login" />
+              }
+            ></Route>
+            <Route path="/timeSession" element={<TimeSession />}></Route>
+            <Route path="/joinSession" element={<JoinSession />}></Route>
+            <Route path="/verify-email" element={<EmailVerified />}></Route>
           </Routes>
         </div>
       </BrowserRouter>

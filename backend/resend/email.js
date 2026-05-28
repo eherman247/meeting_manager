@@ -1,4 +1,5 @@
 const resend = require("./config.js");
+const verificationEmailTemplate = require("./emailTemplates.js");
 
 const sendVerificationEmail = async (email, token) => {
   try {
@@ -6,7 +7,7 @@ const sendVerificationEmail = async (email, token) => {
       from: "onboarding@resend.dev",
       to: email,
       subject: "Verify your email",
-      html: `<p>Click <a href="http://localhost:3000/verify-email?token=${token}">here</a> to verify your email.</p>`,
+      html: verificationEmailTemplate(token),
     });
   } catch (error) {
     console.error("Error sending verification email:", error);

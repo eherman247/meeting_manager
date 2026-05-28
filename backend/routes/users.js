@@ -3,6 +3,7 @@ const {
   createAccount,
   loginUser,
   verifyUser,
+  verifyEmail,
 } = require("../controllers/userController");
 const requireAuth = require("../middleware/requireAuth");
 
@@ -16,5 +17,7 @@ router.post("/createUser", createAccount);
 
 // verify JWT and keep user logged in on page load
 router.get("/verify", requireAuth, verifyUser);
+
+router.patch("/verify-email", verifyEmail);
 
 module.exports = router;
