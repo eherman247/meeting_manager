@@ -1,7 +1,9 @@
 const User = require("../models/userModel");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const sendVerificationEmail = require("../resend/email");
+const sendVerificationEmail = require("../resend/email").sendVerificationEmail;
+const sendResetPasswordEmail =
+  require("../resend/email").sendResetPasswordEmail;
 
 const createToken = (res, _id) => {
   const token = jwt.sign({ _id }, process.env.SECRET, { expiresIn: "1d" });
@@ -28,8 +30,11 @@ const createAccount = async (req, res) => {
 
     const token = createToken(user._id);
 
+    console.log("About to send verification email to:", email);
     // Send verification email
     await sendVerificationEmail(email, user.verificationToken);
+
+    console.log("Verification email sent to:", email);
 
     res.status(200).json({ email, token });
   } catch (error) {
@@ -43,7 +48,6 @@ const verifyUser = async (req, res) => {
 };
 
 const verifyEmail = async (req, res) => {
-  console.log("Received email verification request with body:", req.body);
   const { token } = req.body;
   try {
     const user = await User.findOne({
@@ -54,11 +58,6 @@ const verifyEmail = async (req, res) => {
       console.error("Invalid or expired verification token");
       return res.status(400).json({ error: "Invalid verification token" });
     }
-
-    console.log("User found for verification:", user.email);
-    console.log("Token provided:", token);
-    console.log("User's verification token:", user.verificationToken);
-    console.log("Token expiration time:", user.verificationTokenExpires);
     user.isVerified = true;
     user.verificationToken = undefined;
     user.verificationTokenExpires = undefined;
@@ -70,9 +69,54 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ error: "No user found with that email" });
+    }
+    const resetPasswordToken = await bcrypt.genSalt(20);
+    const resetPasswordExpires = Date.now() + 60 * 60 * 1000;
+    user.resetPasswordToken = resetPasswordToken;
+    user.resetPasswordExpires = resetPasswordExpires;
+    await user.save();
+    // Send password reset email
+    await sendResetPasswordEmail(user.email, resetPasswordToken);
+    res.status(200).json({ message: "Password reset email sent" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+    if (!user) {
+      return res.status(400).json({ error: "Invalid or expired reset token" });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(newPassword, salt);
+    user.password = hash;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+    res.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createAccount,
   loginUser,
   verifyUser,
   verifyEmail,
+  forgotPassword,
+  resetPassword,
 };
