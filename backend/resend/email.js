@@ -1,11 +1,12 @@
 const resend = require("./config.js");
+const host_email = process.env.RESEND_EMAIL;
 const verificationEmailTemplate = require("./emailTemplates.js");
 const resetPasswordTemplate = require("./resetPasswordTemplate.js");
 
 const sendVerificationEmail = async (email, token) => {
   try {
     await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: host_email,
       to: email,
       subject: "Verify your email",
       html: verificationEmailTemplate(token),
@@ -19,7 +20,7 @@ const sendVerificationEmail = async (email, token) => {
 const sendResetPasswordEmail = async (email, resetPasswordToken) => {
   try {
     await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: host_email,
       to: email,
       subject: "Reset your password",
       html: resetPasswordTemplate(resetPasswordToken),
