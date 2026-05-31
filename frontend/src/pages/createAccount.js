@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useCreateAccount } from "../hooks/useCreateAccount";
+import { useNavigate } from "react-router-dom";
 
 const CreateAccount = () => {
   const [firstName, setFirstName] = useState("");
@@ -8,6 +9,7 @@ const CreateAccount = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const {
     createAccount,
     error: createAccountError,
@@ -23,6 +25,7 @@ const CreateAccount = () => {
     }
     try {
       await createAccount(firstName, lastName, email.toLowerCase(), password);
+      navigate("/emailVerificationSent");
     } catch (err) {
       setError(err.message);
     }

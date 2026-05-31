@@ -8,7 +8,11 @@ import SessionsOverview from "./pages/sessionsOverview";
 import TimeSessionCreation from "./pages/timeSessionCreation";
 import TimeSession from "./pages/timeSession";
 import JoinSession from "./pages/joinSession";
+import EmailVerificationSent from "./pages/emailVerificationSent";
 import EmailVerified from "./pages/emailVerified";
+import ForgotPassword from "./pages/forgotPassword";
+import PasswordResetSent from "./pages/passwordResetSent";
+import ResetPassword from "./pages/resetPassword";
 
 import Navbar from "./components/navbar";
 
@@ -43,7 +47,23 @@ function App() {
             ></Route>
             <Route path="/timeSession" element={<TimeSession />}></Route>
             <Route path="/joinSession" element={<JoinSession />}></Route>
-            <Route path="/verify-email" element={<EmailVerified />}></Route>
+            <Route
+              path="/emailVerificationSent"
+              element={<EmailVerificationSent />}
+            ></Route>
+            <Route
+              path="/verify-email/:token"
+              element={<EmailVerified />}
+            ></Route>
+            <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+            <Route
+              path="/passwordResetSent"
+              element={<PasswordResetSent />}
+            ></Route>
+            <Route
+              path="/reset-password/:token"
+              element={<ResetPassword />}
+            ></Route>
           </Routes>
         </div>
       </BrowserRouter>

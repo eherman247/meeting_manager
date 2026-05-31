@@ -77,6 +77,11 @@ userScheme.statics.login = async function (email, password) {
   if (!match) {
     throw Error("Incorrect password");
   }
+
+  if (!user.isVerified) {
+    throw Error("Please verify your email before logging in");
+  }
+
   return user;
 };
 

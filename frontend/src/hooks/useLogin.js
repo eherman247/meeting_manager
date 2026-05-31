@@ -20,6 +20,11 @@ export const useLogin = () => {
       setError(json.error || json.message || "Could not log in");
     }
     if (response.ok) {
+      if (!json.isVerified) {
+        setIsLoading(false);
+        setError("Please verify your email before logging in");
+        return;
+      }
       // Logged in successfully, save the user to local storage
       localStorage.setItem("user", JSON.stringify(json));
 

@@ -4,6 +4,8 @@ const {
   loginUser,
   verifyUser,
   verifyEmail,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/userController");
 const requireAuth = require("../middleware/requireAuth");
 
@@ -19,5 +21,9 @@ router.post("/createUser", createAccount);
 router.get("/verify", requireAuth, verifyUser);
 
 router.patch("/verify-email", verifyEmail);
+
+router.post("/forgot-password", forgotPassword);
+
+router.patch("/reset-password/:token", resetPassword);
 
 module.exports = router;
