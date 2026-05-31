@@ -52,7 +52,7 @@ function App() {
               element={<EmailVerificationSent />}
             ></Route>
             <Route
-              path="/verify-email/:token"
+              path="/verify-email/"
               element={<EmailVerified />}
             ></Route>
             <Route path="/forgot-password" element={<ForgotPassword />}></Route>
@@ -61,7 +61,7 @@ function App() {
               element={<PasswordResetSent />}
             ></Route>
             <Route
-              path="/reset-password/:token"
+              path="/reset-password/"
               element={<ResetPassword />}
             ></Route>
           </Routes>
