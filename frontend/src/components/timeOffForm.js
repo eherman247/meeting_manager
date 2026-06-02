@@ -55,7 +55,7 @@ const TimeOffForm = (currentUsersNames) => {
         day: day,
         timeStart: startMin,
         timeEnd: endMin,
-        timeSession_id: currentTimeSession._id,
+        sessionCode: currentTimeSession.sessionCode,
       };
       console.log("Submitting time off:", time);
 
@@ -96,7 +96,7 @@ const TimeOffForm = (currentUsersNames) => {
       <select
         id="nameSelect"
         onChange={(e) => {
-          if (e.target.value === "other") {
+          if (e.target.value === "New Name") {
             setShowCustomName(true);
             setName("");
           } else {
@@ -105,7 +105,7 @@ const TimeOffForm = (currentUsersNames) => {
             setCustomName("");
           }
         }}
-        value={showCustomName ? "other" : name}
+        value={showCustomName ? "New Name" : name}
         required={!showCustomName}
       >
         <option value=""></option>
@@ -115,7 +115,7 @@ const TimeOffForm = (currentUsersNames) => {
               {userName}
             </option>
           ))}
-        <option value="other">Other</option>
+        <option value="New Name">New Name</option>
       </select>
       {showCustomName && (
         <input

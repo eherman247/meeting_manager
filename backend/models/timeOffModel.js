@@ -1,32 +1,32 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
 const timeOffScheme = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   day: {
     type: String,
-    required: true
+    required: true,
   },
   timeStart: {
     type: Number,
-    required: true
+    required: true,
   },
-  timeEnd:{
+  timeEnd: {
     type: Number,
-    required: true
+    required: true,
   },
   user_id: {
     type: String,
-    required: false
+    required: false,
   },
-  timeSession_id: {
+  sessionCode: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-module.exports = mongoose.model('TimeOff', timeOffScheme)
+module.exports = mongoose.model("TimeOff", timeOffScheme);

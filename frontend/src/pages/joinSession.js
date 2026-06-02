@@ -28,7 +28,10 @@ const JoinSession = () => {
           throw new Error("Incorrect password");
         }
       }
-      localStorage.setItem("currentTimeSession", JSON.stringify(json));
+      localStorage.setItem(
+        "currentTimeSession",
+        JSON.stringify({ title: json.title, sessionCode: json.sessionCode }),
+      );
       navigate("/timeSession");
       setSessionCode("");
       setError(null);

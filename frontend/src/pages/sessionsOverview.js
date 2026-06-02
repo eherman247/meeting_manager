@@ -43,7 +43,10 @@ const SessionsOverview = () => {
                 onClick={() => {
                   localStorage.setItem(
                     "currentTimeSession",
-                    JSON.stringify(session),
+                    JSON.stringify({
+                      title: session.title,
+                      sessionCode: session.sessionCode,
+                    }),
                   );
                   navigate("/timeSession");
                 }}
@@ -64,6 +67,13 @@ const SessionsOverview = () => {
                         type: "DELETE_TIMESESSION",
                         payload: session,
                       });
+                      if (
+                        JSON.parse(localStorage.getItem("currentTimeSession"))
+                          ?.sessionCode === session.sessionCode
+                      ) {
+                        localStorage.removeItem("currentTimeSession");
+                        navigate("/sessionsOverview");
+                      }
                     }
                   });
                 }}

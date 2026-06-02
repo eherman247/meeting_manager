@@ -45,7 +45,7 @@ const TimeSession = () => {
         return;
       }
       const response = await fetch(
-        `/times?timeSession_id=${currentTimeSession._id}`,
+        `/times?sessionCode=${currentTimeSession.sessionCode}`,
         {
           headers: {
             "Content-Type": "application/json",
