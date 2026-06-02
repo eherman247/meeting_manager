@@ -20,6 +20,7 @@ export const useLogin = () => {
       setError(json.error || json.message || "Could not log in");
     }
     if (response.ok) {
+      console.log("Login successful, received response:", json);
       if (!json.isVerified) {
         setIsLoading(false);
         setError("Please verify your email before logging in");

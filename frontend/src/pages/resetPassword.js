@@ -16,14 +16,15 @@ const ResetPassword = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     try {
-      const response = await fetch(`/api/reset-password/${token}`, {
+      const response = await fetch(`/api/auth/users/reset-password/${token}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ password: password }),
+        body: JSON.stringify({ newPassword: password }),
       });
       const data = await response.json();
+      console.log("Received reset password response:", data);
       if (response.ok) {
         navigate("/login");
       } else {

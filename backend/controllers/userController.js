@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const sendVerificationEmail = require("../resend/email").sendVerificationEmail;
 const sendResetPasswordEmail =
   require("../resend/email").sendResetPasswordEmail;
@@ -16,7 +17,7 @@ const loginUser = async (req, res) => {
   try {
     const user = await User.login(email, password);
     const token = createToken(res, user._id);
-    res.status(200).json({ email, token });
+    res.status(200).json({ email, token, isVerified: user.isVerified });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -71,6 +72,7 @@ const verifyEmail = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
+  console.log("Received forgot password request for email:", email);
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -102,6 +104,7 @@ const resetPassword = async (req, res) => {
     }
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(newPassword, salt);
+    console.log("Resetting password for user:", user.email);
     user.password = hash;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;

@@ -9,7 +9,7 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/forgot-password", {
+      const response = await fetch("/api/auth/users/forgot-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -17,6 +17,7 @@ const ForgotPassword = () => {
         body: JSON.stringify({ email: email }),
       });
       const data = await response.json();
+      console.log("Received forgot password response:", data);
       if (response.ok) {
         navigate("/passwordResetSent");
       } else {
