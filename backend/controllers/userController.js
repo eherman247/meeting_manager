@@ -2,11 +2,14 @@ const User = require("../models/userModel");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+const validator = require("validator");
+const logger = require("../utils/logger");
 const sendVerificationEmail = require("../resend/email").sendVerificationEmail;
 const sendResetPasswordEmail =
   require("../resend/email").sendResetPasswordEmail;
 
-const createToken = (res, _id) => {
+const createToken = (_id) => {
   const token = jwt.sign({ _id }, process.env.SECRET, { expiresIn: "1d" });
   return token;
 };
@@ -14,9 +17,14 @@ const createToken = (res, _id) => {
 // get a single user
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+  const cleanEmail =
+    typeof email === "string" ? email.trim().toLowerCase() : "";
+  if (!cleanEmail || !password) {
+    return res.status(400).json({ error: "Email and password are required" });
+  }
   try {
-    const user = await User.login(email, password);
-    const token = createToken(res, user._id);
+    const user = await User.login(cleanEmail, password);
+    const token = createToken(user._id);
     res.status(200).json({ email, token, isVerified: user.isVerified });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -26,16 +34,29 @@ const loginUser = async (req, res) => {
 // create a new user
 const createAccount = async (req, res) => {
   const { fname, lname, email, password } = req.body;
+  const cleanFname = typeof fname === "string" ? fname.trim() : "";
+  const cleanLname = typeof lname === "string" ? lname.trim() : "";
+  const cleanEmail =
+    typeof email === "string" ? email.trim().toLowerCase() : "";
+
+  if (!cleanFname || !cleanLname || !cleanEmail || !password) {
+    return res.status(400).json({ error: "All fields must be provided" });
+  }
+  if (!validator.isEmail(cleanEmail)) {
+    return res.status(400).json({ error: "Invalid email address" });
+  }
   try {
-    const user = await User.signup(fname, lname, email, password);
+    const user = await User.signup(
+      cleanFname,
+      cleanLname,
+      cleanEmail,
+      password,
+    );
 
     const token = createToken(user._id);
 
-    console.log("About to send verification email to:", email);
-    // Send verification email
+    logger.info("Sending verification email for new signup");
     await sendVerificationEmail(email, user.verificationToken);
-
-    console.log("Verification email sent to:", email);
 
     res.status(200).json({ email, token });
   } catch (error) {
@@ -56,29 +77,33 @@ const verifyEmail = async (req, res) => {
       verificationTokenExpires: { $gt: Date.now() },
     });
     if (!user) {
-      console.error("Invalid or expired verification token");
-      return res.status(400).json({ error: "Invalid verification token" });
+      logger.error("Invalid or expired verification token");
+      return res
+        .status(400)
+        .json({ error: "Invalid verification token", isVerified: false });
     }
     user.isVerified = true;
     user.verificationToken = undefined;
     user.verificationTokenExpires = undefined;
     await user.save();
-    res.status(200).json({ message: "Email verified successfully" });
+    res
+      .status(200)
+      .json({ isVerified: true, message: "Email verified successfully" });
   } catch (error) {
-    console.error("Error verifying email:", error);
-    res.status(400).json({ error: error.message });
+    logger.error("Error verifying email:", error);
+    res.status(400).json({ error: error.message, isVerified: false });
   }
 };
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
-  console.log("Received forgot password request for email:", email);
+  logger.info("Received forgot password request");
   try {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ error: "No user found with that email" });
     }
-    const resetPasswordToken = await bcrypt.genSalt(20);
+    const resetPasswordToken = crypto.randomBytes(32).toString("hex");
     const resetPasswordExpires = Date.now() + 60 * 60 * 1000;
     user.resetPasswordToken = resetPasswordToken;
     user.resetPasswordExpires = resetPasswordExpires;
@@ -104,7 +129,7 @@ const resetPassword = async (req, res) => {
     }
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(newPassword, salt);
-    console.log("Resetting password for user:", user.email);
+    logger.info("Resetting password for a verified user");
     user.password = hash;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;

@@ -13,6 +13,9 @@ const router = express.Router();
 // get all timesessions
 router.get("/", requireAuth, getTimeSessions);
 
+// get a single timesession by session code
+router.get("/code/:sessionCode", getTimeSessionByCode);
+
 // get a single timesession
 router.get("/:id", getTimeSession);
 

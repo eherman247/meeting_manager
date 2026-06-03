@@ -6,6 +6,20 @@ const EmailVerified = () => {
   if (isVerified === null) {
     return <div>Checking email verification status...</div>;
   }
+  if (!isVerified) {
+    return (
+      <div className="email-verified-container">
+        <h1>Verification Failed</h1>
+        <p>
+          We couldn&apos;t verify your email. Please try the verification link
+          again or contact support.
+        </p>
+        <a href="/" className="login-link">
+          Go Home
+        </a>
+      </div>
+    );
+  }
 
   return (
     <div className="email-verified-container">

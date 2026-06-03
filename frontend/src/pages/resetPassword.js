@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import apiClient from "../utils/apiClient";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,23 +17,26 @@ const ResetPassword = () => {
     }
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
+    if (!token) {
+      setError("Missing or invalid reset token");
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
     try {
-      const response = await fetch(`/api/auth/users/reset-password/${token}`, {
+      const data = await apiClient(`/api/auth/users/reset-password/${token}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ newPassword: password }),
+        body: { newPassword: password },
       });
-      const data = await response.json();
       console.log("Received reset password response:", data);
-      if (response.ok) {
-        navigate("/login");
-      } else {
-        setError(data.error || "Failed to reset password");
-      }
+      navigate("/login");
     } catch (err) {
-      setError("An error occurred while resetting the password");
+      if (!error)
+        setError(
+          err.message || "An error occurred while resetting the password",
+        );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,7 +62,9 @@ const ResetPassword = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-        <button type="submit">Reset Password</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Resetting..." : "Reset Password"}
+        </button>
       </form>
       {error && <div className="error">{error}</div>}
     </div>

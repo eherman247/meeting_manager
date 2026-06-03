@@ -38,20 +38,33 @@ const getTimeSessionByCode = async (req, res) => {
 // create a new time session
 const createTimeSession = async (req, res) => {
   const { title, password, sessionCode } = req.body;
+  if (!req.user || !req.user._id) {
+    return res.status(401).json({ error: "Authentication required" });
+  }
   const user_id = req.user._id;
+
+  if (!title || typeof title !== "string" || !title.trim()) {
+    return res.status(400).json({ error: "Title is required" });
+  }
+  if (
+    !sessionCode ||
+    typeof sessionCode !== "string" ||
+    sessionCode.trim().length !== 6
+  ) {
+    return res.status(400).json({ error: "Invalid session code" });
+  }
 
   try {
     const timeSession = await TimeSession.create({
-      title,
-      password,
-      sessionCode,
+      title: title.trim(),
+      password: password || null,
+      sessionCode: sessionCode.trim().toLowerCase(),
       user_id,
     });
-    res.status(200).json(timeSession);
+    return res.status(200).json(timeSession);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
-  res.json({ mssg: "POST a new time session" });
 };
 
 // delete a time session

@@ -1,4 +1,8 @@
-const verificationEmailTemplate = (verificationToken) => `
+const getFrontendUrl = require("./frontendUrl");
+
+const verificationEmailTemplate = (verificationToken) => {
+  const frontend = getFrontendUrl();
+  return `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="ltr" lang="en">
   <head>
@@ -187,7 +191,7 @@ const verificationEmailTemplate = (verificationToken) => `
                                               </tbody>
                                             </table>
                                             <a
-                                              href="http://localhost:3000/verify-email?token=${verificationToken}"
+                                              href="${frontend}/verify-email?token=${verificationToken}"
                                               style="line-height:1.5;text-decoration:none;display:inline-block;max-width:100%;mso-padding-alt:0px;background-color:rgb(16,59,5);font-size:15px;letter-spacing:-0.075px;font-weight:500;font-family:Inter,Arial,sans-serif;color:rgb(251,255,249);border-style:none;padding-right:20px;padding-left:20px;padding-bottom:14px;padding-top:14px;text-align:center"
                                               target="_blank"
                                               ><span
@@ -245,5 +249,6 @@ const verificationEmailTemplate = (verificationToken) => `
   </body>
 </html>
 `;
+};
 
 module.exports = verificationEmailTemplate;

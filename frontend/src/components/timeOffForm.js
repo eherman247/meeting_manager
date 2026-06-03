@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTimeOffContext } from "../hooks/useTimeOffsContext";
 import { timeToMin } from "../utils/timeConvert";
+import apiClient from "../utils/apiClient";
 
 const TimeOffForm = (currentUsersNames) => {
   const users = currentUsersNames.currentUsersNames;
@@ -11,6 +12,7 @@ const TimeOffForm = (currentUsersNames) => {
   const [timeStart, setTimeStart] = useState("00:00");
   const [timeEnd, setTimeEnd] = useState("00:01");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [showCustomName, setShowCustomName] = useState(false);
   const [customName, setCustomName] = useState("");
   const daysOfWeek = [
@@ -36,10 +38,14 @@ const TimeOffForm = (currentUsersNames) => {
       return;
     }
 
+    setIsLoading(true);
+    setError(null);
+
     // Check if at least one day is selected
     const daysToSubmit = useEveryday ? daysOfWeek : selectedDays;
     if (daysToSubmit.length === 0) {
       setError("Please select at least one day.");
+      setIsLoading(false);
       return;
     }
 
@@ -57,21 +63,20 @@ const TimeOffForm = (currentUsersNames) => {
         timeEnd: endMin,
         sessionCode: currentTimeSession.sessionCode,
       };
-      console.log("Submitting time off:", time);
 
-      const response = await fetch("/times", {
-        method: "POST",
-        body: JSON.stringify(time),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const json = await response.json();
-
-      if (!response.ok) {
-        setError(json.error);
+      let json;
+      try {
+        json = await apiClient("/times", {
+          method: "POST",
+          body: time,
+          requireAuth: true,
+        });
+      } catch (err) {
+        setError(err.message || "Failed to add time off");
+        setIsLoading(false);
+        return;
       }
-      if (response.ok && i === daysToSubmit.length - 1) {
+      if (i === daysToSubmit.length - 1) {
         // only reset form and dispatch after last request
         setName("");
         setCustomName("");
@@ -82,7 +87,8 @@ const TimeOffForm = (currentUsersNames) => {
         setTimeEnd("00:01");
         setError(null);
         dispatch({ type: "CREATE_TIMEOFF", payload: json });
-      } else if (response.ok) {
+        setIsLoading(false);
+      } else {
         dispatch({ type: "CREATE_TIMEOFF", payload: json });
       }
     }
@@ -187,7 +193,9 @@ const TimeOffForm = (currentUsersNames) => {
         required
       />
 
-      <button>Add Time</button>
+      <button disabled={isLoading}>
+        {isLoading ? "Adding..." : "Add Time"}
+      </button>
       {error && <div className="error">{error}</div>}
     </form>
   );

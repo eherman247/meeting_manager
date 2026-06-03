@@ -14,6 +14,7 @@ const Login = () => {
     setError(null);
     try {
       await login(email.toLowerCase(), password);
+      navigate("/main");
     } catch (err) {
       setError(err.message);
     }
@@ -37,7 +38,7 @@ const Login = () => {
         />
 
         <button type="submit" disabled={isLoading}>
-          Login
+          {isLoading ? "Logging in..." : "Login"}
         </button>
         {error && <div className="error">{error}</div>}
         {loginError && <div className="error">{loginError}</div>}
