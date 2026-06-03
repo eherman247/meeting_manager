@@ -48,7 +48,10 @@ const JoinSession = () => {
 
           localStorage.setItem(
             "currentTimeSession",
-            JSON.stringify({ title: json.title, sessionCode: json.sessionCode }),
+            JSON.stringify({
+              title: json.title,
+              sessionCode: json.sessionCode,
+            }),
           );
           navigate("/timeSession");
           setSessionCode("");
