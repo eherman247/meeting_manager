@@ -86,7 +86,7 @@ const TimeSession = () => {
       >
         {showTimeOffs
           ? "Hide Availability"
-          : "Show Full List of Availability Times"}
+          : "Show Full List of Users and Times"}
       </button>
 
       {showTimeOffs && (
@@ -146,7 +146,10 @@ const TimeSession = () => {
           <input
             type="number"
             value={timeFilter}
-            onChange={(e) => setTimeFilter(parseInt(e.target.value))}
+            onChange={(e) => {
+              const v = parseInt(e.target.value, 10);
+              setTimeFilter(Number.isFinite(v) ? v : 0);
+            }}
             min="0"
           />
         </div>

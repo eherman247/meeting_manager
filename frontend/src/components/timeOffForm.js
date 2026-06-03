@@ -3,8 +3,8 @@ import { useTimeOffContext } from "../hooks/useTimeOffsContext";
 import { timeToMin } from "../utils/timeConvert";
 import apiClient from "../utils/apiClient";
 
-const TimeOffForm = (currentUsersNames) => {
-  const users = currentUsersNames.currentUsersNames;
+const TimeOffForm = ({ currentUsersNames }) => {
+  const users = currentUsersNames || [];
   const { dispatch } = useTimeOffContext();
   const [name, setName] = useState("");
   const [selectedDays, setSelectedDays] = useState([]);

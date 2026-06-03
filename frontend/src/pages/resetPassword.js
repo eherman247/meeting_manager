@@ -24,11 +24,10 @@ const ResetPassword = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await apiClient(`/api/auth/users/reset-password/${token}`, {
+      await apiClient(`/api/auth/users/reset-password/${token}`, {
         method: "PATCH",
         body: { newPassword: password },
       });
-      console.log("Received reset password response:", data);
       navigate("/login");
     } catch (err) {
       if (!error)

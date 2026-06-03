@@ -30,7 +30,15 @@ const apiClient = async (path, options = {}) => {
     }
   }
 
-  const apiRoot = process.env.REACT_APP_API_BASE_URL || "";
+  const localDevRoot =
+    typeof window !== "undefined" &&
+    window.location.hostname
+      ? `http://${window.location.hostname}:4000`
+      : "";
+  const apiRoot =
+    process.env.REACT_APP_API_BASE_URL ||
+    localDevRoot ||
+    (process.env.NODE_ENV === "development" ? "http://localhost:4000" : "");
   const res = await fetch(`${apiRoot}${path}`, fetchOpts);
   let data = null;
   try {
@@ -40,12 +48,14 @@ const apiClient = async (path, options = {}) => {
   }
 
   if (!res.ok) {
-    const message =
-      (data && (data.error || data.message)) ||
-      `Request failed with status ${res.status}`;
-    const err = new Error(message);
+    const remoteError = data && (data.error || data.message);
+    const message = remoteError
+      ? remoteError
+      : `Request failed with status ${res.status}`;
+    const err = new Error(`${message} [${fetchOpts.method} ${apiRoot}${path}]`);
     err.status = res.status;
     err.data = data;
+    err.url = `${apiRoot}${path}`;
     throw err;
   }
 

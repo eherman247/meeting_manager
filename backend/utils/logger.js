@@ -1,5 +1,6 @@
 const isProduction = process.env.NODE_ENV === "production";
 const shouldDebug = process.env.DEBUG === "true" || !isProduction;
+const shouldLogErrors = process.env.LOG_ERRORS === "true" || !isProduction;
 
 const info = (...args) => {
   if (shouldDebug) {
@@ -14,7 +15,9 @@ const warn = (...args) => {
 };
 
 const error = (...args) => {
-  console.error(...args);
+  if (shouldLogErrors) {
+    console.error(...args);
+  }
 };
 
 module.exports = {

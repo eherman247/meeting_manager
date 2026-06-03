@@ -13,11 +13,10 @@ const ForgotPassword = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await apiClient("/api/auth/users/forgot-password", {
+      await apiClient("/api/auth/users/forgot-password", {
         method: "POST",
         body: { email: email },
       });
-      console.log("Received forgot password response:", data);
       navigate("/passwordResetSent");
     } catch (err) {
       if (!error)

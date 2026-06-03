@@ -14,13 +14,11 @@ export const useEmailVerification = () => {
         });
         const data = await response.json();
         if (!response.ok) {
-          console.error("Email verification failed:", data.error || data);
           setIsVerified(false);
           return;
         }
         setIsVerified(Boolean(data.isVerified));
       } catch (error) {
-        console.error("Error checking email verification status:", error);
         setIsVerified(false);
       }
     };

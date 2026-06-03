@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../utils/apiClient";
 
 const JoinSession = () => {
   const [sessionCode, setSessionCode] = useState("");
-  const [password, setPassword] = useState(null);
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -12,22 +13,20 @@ const JoinSession = () => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
-    try {
-      const response = await fetch(`/timeSessions/code/${sessionCode}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      const json = await response.json();
-      console.log("time session response", json);
-      if (!response.ok) {
-        throw new Error(json.error || "Failed to join session");
-      }
+    const normalizedCode = sessionCode.trim().toLowerCase();
 
-      if (json.password) {
-        if (password !== json.password) {
-          throw new Error("Incorrect password");
-        }
-      }
+    if (!normalizedCode) {
+      setError("Please enter a valid session code.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const json = await apiClient(`/timeSessions/join`, {
+        method: "POST",
+        body: { sessionCode: normalizedCode, password },
+      });
+
       localStorage.setItem(
         "currentTimeSession",
         JSON.stringify({ title: json.title, sessionCode: json.sessionCode }),
@@ -36,6 +35,30 @@ const JoinSession = () => {
       setSessionCode("");
       setError(null);
     } catch (err) {
+      if (
+        err.status === 404 &&
+        !err.data?.error &&
+        err.url?.endsWith("/timeSessions/join")
+      ) {
+        try {
+          const json = await apiClient(`/timeSession/join`, {
+            method: "POST",
+            body: { sessionCode: normalizedCode, password },
+          });
+
+          localStorage.setItem(
+            "currentTimeSession",
+            JSON.stringify({ title: json.title, sessionCode: json.sessionCode }),
+          );
+          navigate("/timeSession");
+          setSessionCode("");
+          setError(null);
+          return;
+        } catch (fallbackErr) {
+          setError(fallbackErr.message);
+          return;
+        }
+      }
       setError(err.message);
     } finally {
       setIsLoading(false);

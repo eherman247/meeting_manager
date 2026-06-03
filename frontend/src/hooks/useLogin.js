@@ -15,7 +15,6 @@ export const useLogin = () => {
         method: "POST",
         body: { email, password },
       });
-      console.log("Login successful, received response:", json);
       if (!json.isVerified) {
         setIsLoading(false);
         setError("Please verify your email before logging in");

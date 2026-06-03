@@ -45,7 +45,6 @@ export const TimeSessionForm = () => {
           unique = true;
           break;
         }
-        console.error("Error checking session code uniqueness:", err);
         setError(err.message || "Could not verify session code uniqueness");
         setLoading(false);
         return;
