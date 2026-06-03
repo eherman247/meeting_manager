@@ -11,6 +11,7 @@ const password = "TestP@ss123!";
 const newPassword = "TestP@ss1234!";
 
 const log = (label, value) =>
+  console.log(`${label}:`, JSON.stringify(value, null, 2));
 
 const request = async (path, opts = {}) => {
   const res = await fetch(`${BASE_URL}${path}`, opts);
