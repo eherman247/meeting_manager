@@ -30,7 +30,7 @@ const loginUser = async (req, res) => {
       .status(200)
       .json({ email: cleanEmail, token, isVerified: user.isVerified });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: "Unable to login" });
   }
 };
 
@@ -63,7 +63,7 @@ const createAccount = async (req, res) => {
 
     res.status(200).json({ email, token });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: "Unable to create account" });
   }
 };
 
@@ -94,7 +94,36 @@ const verifyEmail = async (req, res) => {
       .json({ isVerified: true, message: "Email verified successfully" });
   } catch (error) {
     logger.error("Error verifying email:", error);
-    res.status(400).json({ error: error.message, isVerified: false });
+    res
+      .status(400)
+      .json({ error: "Unable to verify email", isVerified: false });
+  }
+};
+
+const resendVerification = async (req, res) => {
+  const { token } = req.body;
+  if (!token) {
+    return res.status(400).json({ error: "Verification token is required" });
+  }
+
+  try {
+    const user = await User.findOne({ verificationToken: token });
+    if (!user || user.isVerified) {
+      return res
+        .status(400)
+        .json({ error: "Unable to resend verification email" });
+    }
+
+    const newToken = crypto.randomBytes(32).toString("hex");
+    user.verificationToken = newToken;
+    user.verificationTokenExpires = Date.now() + 24 * 60 * 60 * 1000;
+    await user.save();
+
+    await sendVerificationEmail(user.email, newToken);
+    res.status(200).json({ message: "Verification email resent" });
+  } catch (error) {
+    logger.error("Error resending verification email:", error);
+    res.status(400).json({ error: "Unable to resend verification email" });
   }
 };
 
@@ -115,7 +144,7 @@ const forgotPassword = async (req, res) => {
     await sendResetPasswordEmail(user.email, resetPasswordToken);
     res.status(200).json({ message: "Password reset email sent" });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: "Unable to process request" });
   }
 };
 
@@ -139,7 +168,7 @@ const resetPassword = async (req, res) => {
     await user.save();
     res.status(200).json({ message: "Password reset successfully" });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: "Unable to reset password" });
   }
 };
 
@@ -148,6 +177,7 @@ module.exports = {
   loginUser,
   verifyUser,
   verifyEmail,
+  resendVerification,
   forgotPassword,
   resetPassword,
 };

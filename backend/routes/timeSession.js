@@ -6,7 +6,7 @@ const {
   joinTimeSession,
   getTimeSessions,
   deleteTimeSession,
-} = require("../controllers/timeSessionController");
+} = require("../controllers/timeSessionController.js");
 const rateLimit = require("express-rate-limit");
 const requireAuth = require("../middleware/requireAuth");
 

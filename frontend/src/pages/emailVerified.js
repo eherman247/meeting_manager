@@ -1,22 +1,39 @@
 import useEmailVerification from "../hooks/useEmailVerification.js";
 
 const EmailVerified = () => {
-  const isVerified = useEmailVerification();
+  const {
+    status,
+    message,
+    resendStatus,
+    resendError,
+    isResending,
+    resendVerificationToken,
+  } = useEmailVerification();
 
-  if (isVerified === null) {
+  if (status === "pending") {
     return <div>Checking email verification status...</div>;
   }
-  if (!isVerified) {
+
+  if (status === "failed") {
     return (
       <div className="email-verified-container">
         <h1>Verification Failed</h1>
-        <p>
-          We couldn&apos;t verify your email. Please try the verification link
-          again or contact support.
-        </p>
-        <a href="/" className="login-link">
-          Go Home
-        </a>
+        <p>{message || "We couldn't verify your email."}</p>
+        <button
+          className="resend-verification-button"
+          onClick={resendVerificationToken}
+          disabled={isResending || resendStatus === "success"}
+        >
+          {isResending
+            ? "Sending new verification email..."
+            : "Resend verification email"}
+        </button>
+        {resendStatus === "success" && (
+          <p className="success-message">
+            A new verification email has been sent. Please check your inbox.
+          </p>
+        )}
+        {resendError && <p className="error">{resendError}</p>}
       </div>
     );
   }
@@ -28,9 +45,6 @@ const EmailVerified = () => {
         Your email has been successfully verified. You can now log in to your
         account.
       </p>
-      <a href="/login" className="login-link">
-        Go to Login
-      </a>
     </div>
   );
 };

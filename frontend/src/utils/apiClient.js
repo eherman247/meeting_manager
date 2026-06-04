@@ -31,8 +31,7 @@ const apiClient = async (path, options = {}) => {
   }
 
   const localDevRoot =
-    typeof window !== "undefined" &&
-    window.location.hostname
+    typeof window !== "undefined" && window.location.hostname
       ? `http://${window.location.hostname}:4000`
       : "";
   const apiRoot =
@@ -52,7 +51,7 @@ const apiClient = async (path, options = {}) => {
     const message = remoteError
       ? remoteError
       : `Request failed with status ${res.status}`;
-    const err = new Error(`${message} [${fetchOpts.method} ${apiRoot}${path}]`);
+    const err = new Error(message);
     err.status = res.status;
     err.data = data;
     err.url = `${apiRoot}${path}`;

@@ -20,6 +20,7 @@ const {
   loginUser,
   verifyUser,
   verifyEmail,
+  resendVerification,
   forgotPassword,
   resetPassword,
 } = require("../controllers/userController");
@@ -66,6 +67,7 @@ router.post("/createUser", createAccountLimiter, createAccount);
 router.get("/verify", requireAuth, verifyUser);
 
 router.patch("/verify-email", authLimiter, verifyEmail);
+router.post("/resend-verification", authLimiter, resendVerification);
 
 router.post("/forgot-password", authLimiter, forgotPassword);
 

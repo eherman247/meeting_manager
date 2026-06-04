@@ -83,7 +83,7 @@ const createTimeOff = async (req, res) => {
     });
     return res.status(200).json(timeOff);
   } catch (error) {
-    return res.status(400).json({ error: error.message });
+    return res.status(400).json({ error: "Unable to create time off" });
   }
 };
 
