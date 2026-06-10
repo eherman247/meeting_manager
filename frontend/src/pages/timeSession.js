@@ -4,6 +4,7 @@ import OverlapAvailDetails from "../components/overlapAvailDetails";
 import { useTimeOffContext } from "../hooks/useTimeOffsContext";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../utils/apiClient";
 
 import { overlapTimes } from "../utils/overlapTimes";
 
@@ -44,18 +45,13 @@ const TimeSession = () => {
         dispatch({ type: "SET_TIMEOFF", payload: [] });
         return;
       }
-      const response = await fetch(
+      const json = await apiClient(
         `/times?sessionCode=${currentTimeSession.sessionCode}`,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          method: "GET",
         },
       );
-      const json = await response.json();
-      if (response.ok) {
-        dispatch({ type: "SET_TIMEOFF", payload: json });
-      }
+      dispatch({ type: "SET_TIMEOFF", payload: json });
     };
     fetchTimeOffs();
   }, [dispatch]);

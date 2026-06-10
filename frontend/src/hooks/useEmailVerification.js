@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import apiClient from "../utils/apiClient";
 
 export const useEmailVerification = () => {
   const [status, setStatus] = useState("pending");
@@ -18,17 +19,10 @@ export const useEmailVerification = () => {
       }
 
       try {
-        const response = await fetch("/api/auth/users/verify-email", {
+        const data = await apiClient("/api/auth/users/verify-email", {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token }),
+          body: { token },
         });
-        const data = await response.json();
-        if (!response.ok) {
-          setStatus("failed");
-          setMessage(data.error || "Verification failed.");
-          return;
-        }
         setStatus(data.isVerified ? "success" : "failed");
         setMessage(
           data.isVerified
@@ -37,7 +31,9 @@ export const useEmailVerification = () => {
         );
       } catch (error) {
         setStatus("failed");
-        setMessage("Unable to verify email. Please try again.");
+        setMessage(
+          error.message || "Unable to verify email. Please try again.",
+        );
       }
     };
 
@@ -56,22 +52,14 @@ export const useEmailVerification = () => {
     setResendError("");
 
     try {
-      const response = await fetch("/api/auth/users/resend-verification", {
+      await apiClient("/api/auth/users/resend-verification", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
+        body: { token },
       });
-      const data = await response.json();
-      if (!response.ok) {
-        setResendStatus("failed");
-        setResendError(data.error || "Unable to resend verification email.");
-      } else {
-        setResendStatus("success");
-        setResendError("");
-      }
+      setResendStatus("success");
     } catch (error) {
       setResendStatus("failed");
-      setResendError("Unable to resend verification email.");
+      setResendError(error.message || "Unable to resend verification email.");
     } finally {
       setIsResending(false);
     }

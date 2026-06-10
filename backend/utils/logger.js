@@ -1,6 +1,6 @@
 const isProduction = process.env.NODE_ENV === "production";
 const shouldDebug = process.env.DEBUG === "true" || !isProduction;
-const shouldLogErrors = process.env.LOG_ERRORS === "true" || !isProduction;
+const shouldLogErrors = process.env.LOG_ERRORS !== "false";
 
 const info = (...args) => {
   if (shouldDebug) {

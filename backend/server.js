@@ -5,6 +5,13 @@ const app = require("./app");
 const logger = require("./utils/logger");
 
 const requiredEnv = ["MONGO_URI", "PORT", "SECRET"];
+if (process.env.NODE_ENV === "production") {
+  requiredEnv.push(
+    "FRONTEND_URL",
+    "RESEND_MEETING_MANAGER_API_KEY",
+    "RESEND_EMAIL",
+  );
+}
 const missingEnv = requiredEnv.filter((key) => !process.env[key]);
 if (missingEnv.length) {
   logger.error(
