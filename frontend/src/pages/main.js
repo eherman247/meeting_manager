@@ -2,6 +2,7 @@ const Home = () => {
   return (
     <>
       <h1>Welcome to Meeting Manager</h1>
+      <h2>App Introduction</h2>
       <p>
         Meeting Manager is an app designed for a single purpose: to help you
         find the best time to meet with your friends, family, fellow students,
@@ -16,7 +17,9 @@ const Home = () => {
         schedule. The app is completely free to use, so give it a try and I hope
         it is helpful to you!
       </p>
+      <p>PS. This app may have updates in the future, so stay tuned!</p>
       <br />
+      <h2>App Tutorial</h2>
       <p>
         Below is a brief video of how to use the app, if it is your first time
         trying it out I highly recommend watching it to get a quick overview of
