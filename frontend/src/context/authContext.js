@@ -1,4 +1,5 @@
 import { createContext, useReducer, useEffect } from "react";
+import apiClient from "../utils/apiClient";
 
 export const AuthContext = createContext();
 
@@ -26,12 +27,12 @@ export const AuthContextProvider = ({ children }) => {
 
     const verifyToken = async () => {
       try {
-        const response = await fetch("/api/auth/users/verify", {
+        await apiClient("/api/auth/users/verify", {
+          requireAuth: true,
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
         });
-        if (!response.ok) throw new Error("Invalid token");
       } catch (error) {
         localStorage.removeItem("user");
         dispatch({ type: "LOGOUT" });

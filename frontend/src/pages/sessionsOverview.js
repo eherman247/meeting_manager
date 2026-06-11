@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTimeSessionContext } from "../hooks/useTimeSessionContext";
 import { useAuthContext } from "../hooks/useAuthContext";
+import apiClient from "../utils/apiClient";
 
 const SessionsOverview = () => {
   const navigate = useNavigate();
@@ -12,17 +13,14 @@ const SessionsOverview = () => {
     const fetchSessions = async () => {
       if (!user) return;
 
-      const response = await fetch("/timeSessions", {
+      const json = await apiClient("/timeSessions", {
+        requireAuth: true,
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       });
 
-      const json = await response.json();
-
-      if (response.ok) {
-        dispatch({ type: "SET_TIMESESSIONS", payload: json });
-      }
+      dispatch({ type: "SET_TIMESESSIONS", payload: json });
     };
 
     fetchSessions();
@@ -56,13 +54,14 @@ const SessionsOverview = () => {
               <button
                 className="page-button"
                 onClick={() => {
-                  fetch(`/timeSessions/${session._id}`, {
+                  apiClient(`/timeSessions/${session._id}`, {
                     method: "DELETE",
+                    requireAuth: true,
                     headers: {
                       Authorization: `Bearer ${user.token}`,
                     },
-                  }).then((response) => {
-                    if (response.ok) {
+                  })
+                    .then(() => {
                       dispatch({
                         type: "DELETE_TIMESESSION",
                         payload: session,
@@ -74,8 +73,10 @@ const SessionsOverview = () => {
                         localStorage.removeItem("currentTimeSession");
                         navigate("/sessionsOverview");
                       }
-                    }
-                  });
+                    })
+                    .catch(() => {
+                      // ignore delete failures for UI flow
+                    });
                 }}
               >
                 delete

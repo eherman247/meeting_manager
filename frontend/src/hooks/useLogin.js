@@ -1,4 +1,5 @@
 import { useState } from "react";
+import apiClient from "../utils/apiClient";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 export const useLogin = () => {
@@ -9,22 +10,15 @@ export const useLogin = () => {
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
-    const response = await fetch("/api/auth/users/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    const json = await response.json();
-    if (!response.ok) {
-      setIsLoading(false);
-      setError(json.error || json.message || "Could not log in");
-    }
-    if (response.ok) {
-      console.log("Login successful, received response:", json);
+    try {
+      const json = await apiClient("/api/auth/users/login", {
+        method: "POST",
+        body: { email, password },
+      });
       if (!json.isVerified) {
         setIsLoading(false);
         setError("Please verify your email before logging in");
-        return;
+        throw new Error("Please verify your email before logging in");
       }
       // Logged in successfully, save the user to local storage
       localStorage.setItem("user", JSON.stringify(json));
@@ -33,6 +27,11 @@ export const useLogin = () => {
       dispatch({ type: "LOGIN", payload: json });
 
       setIsLoading(false);
+      return json;
+    } catch (err) {
+      setIsLoading(false);
+      if (!error) setError(err.message);
+      throw err;
     }
   };
 

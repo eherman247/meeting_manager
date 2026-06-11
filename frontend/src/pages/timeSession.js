@@ -4,6 +4,7 @@ import OverlapAvailDetails from "../components/overlapAvailDetails";
 import { useTimeOffContext } from "../hooks/useTimeOffsContext";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../utils/apiClient";
 
 import { overlapTimes } from "../utils/overlapTimes";
 
@@ -44,18 +45,13 @@ const TimeSession = () => {
         dispatch({ type: "SET_TIMEOFF", payload: [] });
         return;
       }
-      const response = await fetch(
+      const json = await apiClient(
         `/times?sessionCode=${currentTimeSession.sessionCode}`,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          method: "GET",
         },
       );
-      const json = await response.json();
-      if (response.ok) {
-        dispatch({ type: "SET_TIMEOFF", payload: json });
-      }
+      dispatch({ type: "SET_TIMEOFF", payload: json });
     };
     fetchTimeOffs();
   }, [dispatch]);
@@ -86,7 +82,7 @@ const TimeSession = () => {
       >
         {showTimeOffs
           ? "Hide Availability"
-          : "Show Full List of Availability Times"}
+          : "Show Full List of Users and Times"}
       </button>
 
       {showTimeOffs && (
@@ -146,7 +142,10 @@ const TimeSession = () => {
           <input
             type="number"
             value={timeFilter}
-            onChange={(e) => setTimeFilter(parseInt(e.target.value))}
+            onChange={(e) => {
+              const v = parseInt(e.target.value, 10);
+              setTimeFilter(Number.isFinite(v) ? v : 0);
+            }}
             min="0"
           />
         </div>

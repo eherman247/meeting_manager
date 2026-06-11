@@ -1,17 +1,19 @@
 import { minToTime } from "../utils/timeConvert";
 import { useTimeOffContext } from "../hooks/useTimeOffsContext";
+import apiClient from "../utils/apiClient";
 
 const TimeOffDetails = ({ timeOff }) => {
   const { dispatch } = useTimeOffContext();
 
   const handleClick = async () => {
-    const response = await fetch("/times/" + timeOff._id, {
-      method: "DELETE",
-    });
-    const json = await response.json();
-
-    if (response.ok) {
+    try {
+      const json = await apiClient(`/times/${timeOff._id}`, {
+        method: "DELETE",
+        requireAuth: true,
+      });
       dispatch({ type: "DELETE_TIMEOFF", payload: json });
+    } catch (err) {
+      // Handle delete error silently or wire in a user-facing message if needed
     }
   };
 

@@ -1,4 +1,5 @@
 const resend = require("./config.js");
+const logger = require("../utils/logger");
 const host_email = process.env.RESEND_EMAIL;
 const verificationEmailTemplate = require("./emailTemplates.js");
 const resetPasswordTemplate = require("./resetPasswordTemplate.js");
@@ -12,7 +13,7 @@ const sendVerificationEmail = async (email, token) => {
       html: verificationEmailTemplate(token),
     });
   } catch (error) {
-    console.error("Error sending verification email:", error);
+    logger.error("Error sending verification email:", error);
     throw new Error("Failed to send verification email");
   }
 };
@@ -26,7 +27,7 @@ const sendResetPasswordEmail = async (email, resetPasswordToken) => {
       html: resetPasswordTemplate(resetPasswordToken),
     });
   } catch (error) {
-    console.error("Error sending reset password email:", error);
+    logger.error("Error sending reset password email:", error);
     throw new Error("Failed to send reset password email");
   }
 };

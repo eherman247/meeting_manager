@@ -1,4 +1,5 @@
 import { useState } from "react";
+import apiClient from "../utils/apiClient";
 //import { useAuthContext } from "../hooks/useAuthContext";
 
 export const useCreateAccount = () => {
@@ -9,25 +10,22 @@ export const useCreateAccount = () => {
   const createAccount = async (fname, lname, email, password) => {
     setIsLoading(true);
     setError(null);
+    try {
+      const json = await apiClient("/api/auth/users/createUser", {
+        method: "POST",
+        body: { fname, lname, email, password },
+      });
 
-    const response = await fetch("/api/auth/users/createUser", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fname, lname, email, password }),
-    });
-    const json = await response.json();
-    if (!response.ok) {
-      setIsLoading(false);
-      setError(json.error || json.message || "Could not create account");
-    }
-    if (response.ok) {
       // Account created successfully
       localStorage.setItem("user", JSON.stringify(json));
-
-      // update auth context
+      // update auth context if desired
       //dispatch({ type: "LOGIN", payload: json });
-
       setIsLoading(false);
+      return json;
+    } catch (err) {
+      setIsLoading(false);
+      if (!error) setError(err.message);
+      throw err;
     }
   };
 

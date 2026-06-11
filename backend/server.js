@@ -1,33 +1,32 @@
-require('dotenv').config()
+require("dotenv").config();
 
-const express = require('express')
-const timeRoutes = require('./routes/times')
-const userRoutes = require('./routes/users')
-const timeSessionRoutes = require('./routes/timeSession')
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
+const app = require("./app");
+const logger = require("./utils/logger");
 
-const app = express()
+const requiredEnv = ["MONGO_URI", "PORT", "SECRET"];
+if (process.env.NODE_ENV === "production") {
+  requiredEnv.push(
+    "FRONTEND_URL",
+    "RESEND_MEETING_MANAGER_API_KEY",
+    "RESEND_EMAIL",
+  );
+}
+const missingEnv = requiredEnv.filter((key) => !process.env[key]);
+if (missingEnv.length) {
+  logger.error(
+    `Missing required environment variables: ${missingEnv.join(", ")}`,
+  );
+  process.exit(1);
+}
 
-app.use(express.json())
-
-app.use((req, res, next) => {
-  console.log(req.path, req.method)
-  next()
-})
-
-app.use('/times', timeRoutes)
-app.use('/api/auth/users', userRoutes)
-app.use('/timeSessions', timeSessionRoutes)
-
-// connect to database
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => {
-    // listen for requests
     app.listen(process.env.PORT, () => {
-    console.log('connected to db and listening on port', process.env.PORT)
-})
+      logger.info("connected to db and listening on port", process.env.PORT);
+    });
   })
   .catch((error) => {
-    console.log(error)
-  })
-
+    logger.error("Database connection failed:", error);
+  });

@@ -1,29 +1,28 @@
-const express = require('express')
+const express = require("express");
 const {
   createTimeOff,
   getTimeOffs,
   getTimeOff,
   deleteTimeOff,
-  updateTimeOff
-} = require('../controllers/timeOffController')
+  updateTimeOff,
+} = require("../controllers/timeOffController");
+const requireAuth = require("../middleware/requireAuth");
 
-const router = express.Router()
+const router = express.Router();
 
+// get all times (public)
+router.get("/", getTimeOffs);
 
+// get a single time (public)
+router.get("/:id", getTimeOff);
 
-// get all times
-router.get('/', getTimeOffs)
+// post a time (requires auth)
+router.post("/", requireAuth, createTimeOff);
 
-// get a single time
-router.get('/:id', getTimeOff)
+// delete a time (requires auth, ownership enforced in controller)
+router.delete("/:id", requireAuth, deleteTimeOff);
 
-// post a time
-router.post('/', createTimeOff)
+// update a time (requires auth, ownership enforced in controller)
+router.patch("/:id", requireAuth, updateTimeOff);
 
-// delete a time
-router.delete('/:id', deleteTimeOff)
-
-// update a time
-router.patch('/:id', updateTimeOff)
-
-module.exports = router
+module.exports = router;

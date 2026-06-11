@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useTimeSessionContext } from "../hooks/useTimeSessionContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../utils/apiClient";
 
 export const TimeSessionForm = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
-  const [password, setPassword] = useState(null);
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { dispatch } = useTimeSessionContext();
@@ -30,26 +31,23 @@ export const TimeSessionForm = () => {
     let randomId = Math.random().toString(36).substring(2, 8);
     let unique = false;
     while (!unique) {
-      console.log(randomId);
-
-      // Check if the generated session code is unique by making a GET request to the backend
       try {
-        const response = await fetch(`/timeSessions/code/${randomId}`, {
+        // If endpoint returns 200 then code exists; if it throws with 404 then it's unique
+        await apiClient(`/timeSessions/code/${randomId}`, {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
+          requireAuth: true,
         });
-        const json = await response.json();
-        if (response.ok) {
-          randomId = Math.random().toString(36).substring(2, 8);
-          throw new Error(json.error || "Session code is not unique");
+        // code exists, try another
+        randomId = Math.random().toString(36).substring(2, 8);
+        continue;
+      } catch (err) {
+        if (err.status === 404) {
+          unique = true;
+          break;
         }
-        console.log("Session code is unique:", json);
-        unique = true;
-      } catch (error) {
-        console.error("Error checking session code uniqueness:", error);
+        setError(err.message || "Could not verify session code uniqueness");
+        setLoading(false);
+        return;
       }
     }
 
@@ -60,32 +58,15 @@ export const TimeSessionForm = () => {
     };
     setLoading(true);
 
-    console.log("Submitting time session:", timeSessionData);
-    console.log("User", user);
-
     try {
-      const response = await fetch("/timeSessions", {
+      const json = await apiClient("/timeSessions", {
         method: "POST",
-        body: JSON.stringify(timeSessionData),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
+        body: timeSessionData,
+        requireAuth: true,
       });
 
-      const json = await response.json();
-      console.log(
-        "timeSessionData sent to server:",
-        JSON.stringify(timeSessionData),
-      );
-      console.log("Response from server:", json);
-
-      if (!response.ok) {
-        throw new Error(json.error || "Failed to create session");
-      }
-
       setTitle("");
-      setPassword(null);
+      setPassword("");
       dispatch({ type: "CREATE_TIMESESSION", payload: json });
 
       localStorage.setItem(
@@ -93,12 +74,11 @@ export const TimeSessionForm = () => {
         JSON.stringify({ title: json.title, sessionCode: json.sessionCode }),
       );
 
-      console.log("Time session created successfully:", json);
+      navigate("/timeSession");
     } catch (err) {
       setError(err.message || "An error occurred");
     } finally {
       setLoading(false);
-      navigate("/timeSession");
     }
   };
 

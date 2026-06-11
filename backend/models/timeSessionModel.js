@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const bcrypt = require("bcrypt");
+
 const timeSessionSchema = new Schema({
   title: {
     type: String,
@@ -27,5 +29,22 @@ const timeSessionSchema = new Schema({
     required: true,
   },
 });
+
+timeSessionSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  if (!this.password) return next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+});
+
+timeSessionSchema.methods.comparePassword = async function (candidate) {
+  if (!this.password) return true;
+  return bcrypt.compare(candidate || "", this.password);
+};
 
 module.exports = mongoose.model("TimeSession", timeSessionSchema);

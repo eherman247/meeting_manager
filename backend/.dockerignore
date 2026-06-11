@@ -1,0 +1,8 @@
+node_modules;
+npm - debug.log * Dockerfile.dockerignore.env.git.gitignore;
+README.md;
+DEPLOY.md;
+frontend;
+build;
+__tests__;
+apiTest.js;

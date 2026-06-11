@@ -5,18 +5,15 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { login, isLoading, error: loginError } = useLogin();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     try {
       await login(email.toLowerCase(), password);
-    } catch (err) {
-      setError(err.message);
-    }
+      navigate("/main");
+    } catch (err) {}
   };
 
   return (
@@ -37,9 +34,8 @@ const Login = () => {
         />
 
         <button type="submit" disabled={isLoading}>
-          Login
+          {isLoading ? "Logging in..." : "Login"}
         </button>
-        {error && <div className="error">{error}</div>}
         {loginError && <div className="error">{loginError}</div>}
       </form>
       <button

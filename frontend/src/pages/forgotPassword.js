@@ -1,30 +1,31 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import apiClient from "../utils/apiClient";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
     try {
-      const response = await fetch("/api/auth/users/forgot-password", {
+      await apiClient("/api/auth/users/forgot-password", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: email }),
+        body: { email: email },
       });
-      const data = await response.json();
-      console.log("Received forgot password response:", data);
-      if (response.ok) {
-        navigate("/passwordResetSent");
-      } else {
-        setError(data.error || "Failed to send password reset email");
-      }
+      navigate("/passwordResetSent");
     } catch (err) {
-      setError("An error occurred while sending the password reset email");
+      if (!error)
+        setError(
+          err.message ||
+            "An error occurred while sending the password reset email",
+        );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -41,7 +42,9 @@ const ForgotPassword = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <button type="submit">Send Password Reset Email</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Sending..." : "Send Password Reset Email"}
+        </button>
       </form>
       {error && <div className="error">{error}</div>}
     </div>
