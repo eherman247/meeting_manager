@@ -1,48 +1,47 @@
-import {Link} from 'react-router-dom'
-import { useLogout } from '../hooks/useLogout'
-import { useAuthContext } from '../hooks/useAuthContext'
+import { Link } from "react-router-dom";
+import { useLogout } from "../hooks/useLogout";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const Navbar = () => {
-
   const { logout } = useLogout();
   const { user } = useAuthContext();
   const handleClick = () => {
     logout();
-  }
+  };
 
   return (
-    <header>
+    <header className="navbar">
       <div className="nav">
-        <Link to='/'>
+        <Link to="/">
           <h1>Meeting Manager</h1>
         </Link>
         <nav>
           {user && (
-          <div>
-            {user.email}
-            <button onClick={handleClick}>Logout</button>
-          </div>
+            <div>
+              {user.email}
+              <button onClick={handleClick}>Logout</button>
+            </div>
           )}
           {!user && (
-          <div>
-            <Link to='/login'>Login</Link>
-            <Link to='/createAccount'>Create Account</Link>
-          </div>
+            <div>
+              <Link to="/login">Login</Link>
+              <Link to="/createAccount">Create Account</Link>
+            </div>
           )}
           {user && (
-          <div>
-            <Link to='/sessionsOverview'>Sessions Overview</Link>
-            <Link to='/timeSessionCreation'>Create Time Session</Link>
-          </div>
+            <div>
+              <Link to="/sessionsOverview">Sessions Overview</Link>
+              <Link to="/timeSessionCreation">Create Time Session</Link>
+            </div>
           )}
           <div>
-            <Link to='/timeSession'>Time Session</Link>
-            <Link to='/joinSession'>Join Session</Link>
+            <Link to="/timeSession">Time Session</Link>
+            <Link to="/joinSession">Join Session</Link>
           </div>
         </nav>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

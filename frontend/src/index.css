@@ -365,5 +365,8 @@ button{
     flex-direction: column;
     align-items: flex-start;
   }
+  .navbar {
+    padding-bottom: 12px;
+  }
 }
 
