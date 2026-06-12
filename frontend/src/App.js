@@ -51,19 +51,13 @@ function App() {
               path="/emailVerificationSent"
               element={<EmailVerificationSent />}
             ></Route>
-            <Route
-              path="/verify-email/"
-              element={<EmailVerified />}
-            ></Route>
+            <Route path="/verify-email" element={<EmailVerified />}></Route>
             <Route path="/forgot-password" element={<ForgotPassword />}></Route>
             <Route
               path="/passwordResetSent"
               element={<PasswordResetSent />}
             ></Route>
-            <Route
-              path="/reset-password/"
-              element={<ResetPassword />}
-            ></Route>
+            <Route path="/reset-password" element={<ResetPassword />}></Route>
           </Routes>
         </div>
       </BrowserRouter>
