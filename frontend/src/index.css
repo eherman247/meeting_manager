@@ -351,22 +351,29 @@ button{
 }
 
 @media (max-width: 768px) {
-  .filters {
+  /* .filters {
     top: 70px;
     height: calc(100vh - 80px);
-  }
+  }*/
   .filters-toggle {
-    top: 78px;
+    top: 120px;
   }
-  .home.filters-open {
+  /*.home.filters-open {
     padding-right: 0;
-  }
+  } */
   .nav {
     flex-direction: column;
     align-items: flex-start;
   }
-  .navbar {
-    padding-bottom: 12px;
+   .navbar {
+    margin-bottom: 30px;
+  }
+  .filters-open {
+    margin-top: 12px;
+  }
+  header {
+    position: sticky;
+    top: 0;
   }
 }
 
