@@ -16,8 +16,6 @@ export const useCreateAccount = () => {
         body: { fname, lname, email, password },
       });
 
-      // Account created successfully
-      localStorage.setItem("user", JSON.stringify(json));
       // update auth context if desired
       //dispatch({ type: "LOGIN", payload: json });
       setIsLoading(false);
