@@ -1,3 +1,5 @@
+import ReactPlayer from "react-player";
+
 const Home = () => {
   return (
     <>
@@ -25,6 +27,13 @@ const Home = () => {
         trying it out I highly recommend watching it to get a quick overview of
         how the app works.
       </p>
+      <ReactPlayer
+        src="https://youtu.be/rjUZQv-auOI"
+        controls={true}
+        width="500px"
+        height="300px"
+        playing={false}
+      />
     </>
   );
 };
