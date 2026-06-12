@@ -69,7 +69,6 @@ const TimeOffForm = ({ currentUsersNames }) => {
         json = await apiClient("/times", {
           method: "POST",
           body: time,
-          requireAuth: true,
         });
       } catch (err) {
         setError(err.message || "Failed to add time off");

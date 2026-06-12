@@ -44,10 +44,6 @@ const getTimeOff = async (req, res) => {
 // create a new time
 const createTimeOff = async (req, res) => {
   const { name, day, timeStart, timeEnd, sessionCode } = req.body;
-  if (!req.user || !req.user._id) {
-    return res.status(401).json({ error: "Authentication required" });
-  }
-  const user_id = req.user._id.toString();
 
   // basic validation
   if (!name || typeof name !== "string" || !name.trim()) {
@@ -78,7 +74,6 @@ const createTimeOff = async (req, res) => {
       day,
       timeStart: start,
       timeEnd: end,
-      user_id,
       sessionCode: sessionCode.trim(),
     });
     return res.status(200).json(timeOff);

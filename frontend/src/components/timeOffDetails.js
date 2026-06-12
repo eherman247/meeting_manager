@@ -9,7 +9,6 @@ const TimeOffDetails = ({ timeOff }) => {
     try {
       const json = await apiClient(`/times/${timeOff._id}`, {
         method: "DELETE",
-        requireAuth: true,
       });
       dispatch({ type: "DELETE_TIMEOFF", payload: json });
     } catch (err) {
