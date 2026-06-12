@@ -361,5 +361,9 @@ button{
   .home.filters-open {
     padding-right: 0;
   }
+  .nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
