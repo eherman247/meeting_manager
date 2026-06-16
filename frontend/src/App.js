@@ -61,6 +61,13 @@ function App() {
           </Routes>
         </div>
       </BrowserRouter>
+      <footer>
+        <p>
+          {" "}
+          Have any issues or would like to leave a comment? Contact us at
+          admin@meeting-manager.com
+        </p>
+      </footer>
     </div>
   );
 }

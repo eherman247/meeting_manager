@@ -13,7 +13,14 @@ const Navbar = () => {
     <header className="navbar">
       <div className="nav">
         <Link to="/">
-          <h1>Meeting Manager</h1>
+          <div className="logo-container">
+            <img
+              src="/MeetingManagerLogo.png"
+              alt="Meeting Manager Logo"
+              className="logo"
+            />
+            <h1 className="logo-text">Meeting Manager</h1>
+          </div>
         </Link>
         <nav>
           {user && (
