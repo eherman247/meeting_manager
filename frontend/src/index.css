@@ -352,10 +352,10 @@ button{
 
 @media (max-width: 768px) {
   .filters-toggle {
-    top: 145px;
+    top: 155px;
   }
   .filters {
-    top: 145px;
+    top: 155px;
   }
   .nav {
     flex-direction: column;
