@@ -15,6 +15,8 @@ const CreateAccount = () => {
     error: createAccountError,
     isLoading,
   } = useCreateAccount();
+  const strongPasswordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,6 +81,8 @@ const CreateAccount = () => {
           onChange={(e) => setPassword(e.target.value)}
           value={password}
           placeholder="Enter your password"
+          pattern={strongPasswordRegex.source}
+          title="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character."
           required
         />
       </div>
