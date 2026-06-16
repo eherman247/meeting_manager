@@ -146,10 +146,6 @@ const TimeSession = () => {
             />
           </div>
 
-          {/* <h3>Users:</h3>
-        {uniqueNames &&
-          uniqueNames.map((person) => <span key={person}>{person}, </span>)} */}
-
           <div className="filter-option">
             <h3>Display individuals who match current user</h3>
             <h4>Select current user:</h4>
