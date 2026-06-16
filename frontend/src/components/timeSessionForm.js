@@ -35,6 +35,7 @@ export const TimeSessionForm = () => {
         // If endpoint returns 200 then code exists; if it throws with 404 then it's unique
         await apiClient(`/timeSessions/code/${randomId}`, {
           method: "GET",
+          requireAuth: true,
         });
         // code exists, try another
         randomId = Math.random().toString(36).substring(2, 8);
@@ -61,6 +62,7 @@ export const TimeSessionForm = () => {
       const json = await apiClient("/timeSessions", {
         method: "POST",
         body: timeSessionData,
+        requireAuth: true,
       });
 
       setTitle("");

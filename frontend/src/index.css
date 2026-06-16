@@ -351,16 +351,12 @@ button{
 }
 
 @media (max-width: 768px) {
-  /* .filters {
-    top: 70px;
-    height: calc(100vh - 80px);
-  }*/
   .filters-toggle {
-    top: 120px;
+    top: 145px;
   }
-  /*.home.filters-open {
-    padding-right: 0;
-  } */
+  .filters {
+    top: 145px;
+  }
   .nav {
     flex-direction: column;
     align-items: flex-start;
@@ -373,7 +369,9 @@ button{
   }
   header {
     position: sticky;
+    width: 100%;
     top: 0;
+    height: 160px;
   }
 }
 
