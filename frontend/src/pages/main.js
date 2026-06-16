@@ -11,7 +11,7 @@ const Home = () => {
         how the app works.
       </p>
       <ReactPlayer
-        src="https://youtu.be/rjUZQv-auOI"
+        src="https://youtu.be/u_nPnSiHeS4"
         controls={true}
         width="300px"
         height="300px"
