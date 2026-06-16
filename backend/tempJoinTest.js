@@ -21,7 +21,6 @@ const User = require("./models/userModel");
       email,
       password,
     });
-  console.log("signup status", signUpResponse.status, signUpResponse.body);
 
   const user = await User.findOne({ email });
   user.isVerified = true;
@@ -32,7 +31,6 @@ const User = require("./models/userModel");
     email,
     password,
   });
-  console.log("login status", login.status, login.body);
 
   const token = login.body.token;
   const sessionCode = "abc123";
@@ -41,12 +39,10 @@ const User = require("./models/userModel");
     .post("/timeSessions")
     .set("Authorization", `Bearer ${token}`)
     .send({ title: "Test Session", password: "", sessionCode });
-  console.log("create status", create.status, create.body);
 
   const join = await request(app)
     .post("/timeSessions/join")
     .send({ sessionCode, password: "" });
-  console.log("join status", join.status, join.body);
 
   await mongoose.disconnect();
   await mongoServer.stop();

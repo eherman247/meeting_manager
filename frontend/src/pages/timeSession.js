@@ -22,18 +22,13 @@ const TimeSession = () => {
 
   const filter = { peopleFilter, timeFilter };
 
-  // console.log("filters in time session", filter)
-
   const { timeOffs, dispatch } = useTimeOffContext();
-  // console.log("timeOffs in time session", timeOffs)
 
   const uniqueNames = useMemo(() => {
     return [
       ...new Set(timeOffs ? timeOffs.map((timeOff) => timeOff.name) : []),
     ];
   }, [timeOffs]);
-
-  // console.log("unique names in time session", uniqueNames)
 
   useEffect(() => {
     const fetchTimeOffs = async () => {

@@ -23,12 +23,10 @@ if (missingEnv.length) {
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("Connected to MongoDB");
     app.listen(process.env.PORT, () => {
       logger.info("connected to db and listening on port", process.env.PORT);
     });
   })
   .catch((error) => {
-    console.log("Database connection failed:", error);
     logger.error("Database connection failed:", error);
   });
